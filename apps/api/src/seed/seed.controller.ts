@@ -1,7 +1,8 @@
 import { Controller, Get, Logger } from '@nestjs/common';
 import { SeedService } from './seed.service';
 import { ConfigService } from '@nestjs/config';
-import { HTTPResponse } from '../core/shared/logger/http/response';
+import { HTTPResponse } from '../core/shared/http/response';
+import { Public } from '@/core/auth/decorators/public-route.decorator';
 
 @Controller('seed')
 export class SeedController {
@@ -12,6 +13,7 @@ export class SeedController {
   ) {}
 
   @Get()
+  @Public()
   public async seed() {
     const mode = this.configService.get('MODE', 'prod');
 
@@ -31,6 +33,7 @@ export class SeedController {
   }
 
   @Get('clear')
+  @Public()
   public async clear() {
     await this.seedService.clearDB();
   }

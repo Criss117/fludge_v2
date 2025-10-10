@@ -19,7 +19,7 @@ import {
   type InsertProduct,
 } from '@fludge/db';
 import { fakerES as faker } from '@faker-js/faker';
-import { hashPassword } from '@/core/shared/logger/utils/passwords.utils';
+import { hashPassword } from '@/core/shared/utils/passwords.utils';
 import { allPermissions } from '@fludge/entities/permissions.entity';
 
 type Options = {

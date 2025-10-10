@@ -1,14 +1,16 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { AppModule } from './app.module';
+import { JwtAuthGuard } from './core/auth/guards/jwt-auth.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
   const PORT = configService.get<number>('PORT', 8081);
+  const reflector = app.get(Reflector);
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({
@@ -17,6 +19,7 @@ async function bootstrap() {
     }),
   );
   app.enableCors();
+  app.useGlobalGuards(new JwtAuthGuard(reflector));
 
   const config = new DocumentBuilder()
     .setTitle('Fludge API')

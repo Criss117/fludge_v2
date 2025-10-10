@@ -5,6 +5,7 @@ import { DbModule } from './core/db/db.module';
 import { SeedModule } from './seed/seed.module';
 import { UsersModule } from './core/users/users.module';
 import { BusinessesModule } from './core/businesses/businesses.module';
+import { AuthModule } from './core/auth/auth.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { BusinessesModule } from './core/businesses/businesses.module';
     SeedModule,
     UsersModule,
     BusinessesModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

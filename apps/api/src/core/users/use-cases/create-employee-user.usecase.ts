@@ -4,7 +4,7 @@ import { UsersCommandsRepository } from '../repositories/users-commands.reposito
 import { CreateEmployeeDto } from '../dtos/create-employee.dto';
 import { UserAlreadyExistsException } from '../exceptions/user-already-exists.exception';
 import { TX } from '@/core/db/db.module';
-import { hashPassword } from '@/core/shared/logger/utils/passwords.utils';
+import { hashPassword } from '@/core/shared/utils/passwords.utils';
 
 type Options = {
   tx: TX;

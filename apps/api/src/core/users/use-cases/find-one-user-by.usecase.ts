@@ -3,15 +3,20 @@ import { UsersQueriesRepository } from '../repositories/users-queries.repository
 import { FindManyUsersByDto } from '../repositories/dtos/find-many-users-by.dto';
 import { UserNotFoundException } from '../exceptions/user-not-found.exception';
 
+type Options = {
+  returnPassword?: boolean;
+};
+
 @Injectable()
 export class FindOneUserByUseCase {
   constructor(
     private readonly usersQueriesRepository: UsersQueriesRepository,
   ) {}
 
-  public async execute(meta: FindManyUsersByDto) {
+  public async execute(meta: FindManyUsersByDto, options?: Options) {
     const user = await this.usersQueriesRepository.findOneBy(meta, {
       ensureActive: true,
+      returnPassword: options?.returnPassword,
     });
 
     if (!user) {

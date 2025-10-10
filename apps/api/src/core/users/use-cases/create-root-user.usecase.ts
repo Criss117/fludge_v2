@@ -3,7 +3,7 @@ import { CreateRootUserDto } from '../dtos/create-root-user.dto';
 import { UsersCommandsRepository } from '../repositories/users-commands.repository';
 import { UsersQueriesRepository } from '../repositories/users-queries.repository';
 import { UserAlreadyExistsException } from '../exceptions/user-already-exists.exception';
-import { hashPassword } from '@/core/shared/logger/utils/passwords.utils';
+import { hashPassword } from '@/core/shared/utils/passwords.utils';
 
 @Injectable()
 export class CreateRootUserUseCase {

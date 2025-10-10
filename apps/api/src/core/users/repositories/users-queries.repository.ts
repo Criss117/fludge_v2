@@ -10,6 +10,7 @@ import type { FindOneEmployeeDto } from './dtos/find-one-employee.dto';
 
 type Options = {
   ensureActive?: boolean;
+  returnPassword?: boolean;
 };
 
 @Injectable()
@@ -88,6 +89,7 @@ export class UsersQueriesRepository {
 
       return {
         ...user,
+        password: options?.returnPassword ? user.password : undefined,
         isRootIn: userBusinesses,
       };
     }
