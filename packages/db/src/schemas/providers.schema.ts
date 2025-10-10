@@ -1,8 +1,8 @@
 import { text } from "drizzle-orm/sqlite-core";
 import { sqliteTable } from "drizzle-orm/sqlite-core";
 import { v4 } from "uuid";
-import { auditMetadata } from "./helpers/audit-metadata";
-import { business } from "./business.schema";
+import { auditMetadata } from "./audit-metadata.schema";
+import { businesses } from "./businesses.schema";
 
 export const providers = sqliteTable("providers", {
   id: text("id")
@@ -23,7 +23,7 @@ export const providers = sqliteTable("providers", {
   principalContact: text("principal_contact", {
     length: 255,
   }),
-  businessId: text("business_id").references(() => business.id),
+  businessId: text("business_id").references(() => businesses.id),
 
   ...auditMetadata,
 });

@@ -4,7 +4,7 @@ import { text } from "drizzle-orm/sqlite-core";
 import { integer } from "drizzle-orm/sqlite-core";
 import { products } from "./products.schema";
 import { providers } from "./providers.schema";
-import { auditMetadata } from "./helpers/audit-metadata";
+import { auditMetadata } from "./audit-metadata.schema";
 
 export const productsProviders = sqliteTable("products_providers", {
   id: text("id")

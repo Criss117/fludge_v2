@@ -2,8 +2,8 @@ import { v4 } from "uuid";
 import { text } from "drizzle-orm/sqlite-core";
 import { sqliteTable } from "drizzle-orm/sqlite-core";
 import { foreignKey } from "drizzle-orm/sqlite-core";
-import { business } from "./business.schema";
-import { auditMetadata } from "./helpers/audit-metadata";
+import { businesses } from "./businesses.schema";
+import { auditMetadata } from "./audit-metadata.schema";
 
 export const categories = sqliteTable(
   "categories",
@@ -18,7 +18,7 @@ export const categories = sqliteTable(
       length: 255,
     }),
     businessId: text("business_id")
-      .references(() => business.id)
+      .references(() => businesses.id)
       .notNull(),
     parentId: text("parent_id"),
     ...auditMetadata,

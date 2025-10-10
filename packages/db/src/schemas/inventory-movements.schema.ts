@@ -1,7 +1,7 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { v4 } from "uuid";
 import { products } from "./products.schema";
-import { auditMetadata } from "./helpers/audit-metadata";
+import { auditMetadata } from "./audit-metadata.schema";
 
 export const inventoryMovements = sqliteTable("inventory_movements", {
   id: text("id")

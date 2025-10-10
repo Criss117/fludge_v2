@@ -2,8 +2,8 @@ import { v4 } from "uuid";
 import { text } from "drizzle-orm/sqlite-core";
 import { sqliteTable } from "drizzle-orm/sqlite-core";
 
-import { business } from "./business.schema";
-import { auditMetadata } from "./helpers/audit-metadata";
+import { businesses } from "./businesses.schema";
+import { auditMetadata } from "./audit-metadata.schema";
 import type { Permission } from "@fludge/entities/permissions.entity";
 
 export const groups = sqliteTable("groups", {
@@ -24,7 +24,7 @@ export const groups = sqliteTable("groups", {
   businessId: text("business_id", {
     length: 255,
   })
-    .references(() => business.id)
+    .references(() => businesses.id)
     .notNull(),
   ...auditMetadata,
 });

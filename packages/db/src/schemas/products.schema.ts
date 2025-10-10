@@ -3,10 +3,10 @@ import { integer, text } from "drizzle-orm/sqlite-core";
 import { sqliteTable } from "drizzle-orm/sqlite-core";
 import { index } from "drizzle-orm/sqlite-core";
 import { unique } from "drizzle-orm/sqlite-core";
-import { auditMetadata } from "./helpers/audit-metadata";
+import { auditMetadata } from "./audit-metadata.schema";
 import { categories } from "./categories.schema";
 import { brands } from "./brands.schema";
-import { business } from "./business.schema";
+import { businesses } from "./businesses.schema";
 
 export const products = sqliteTable(
   "products",
@@ -26,7 +26,7 @@ export const products = sqliteTable(
     categoryId: text("category_id").references(() => categories.id),
     brandId: text("brand_id").references(() => brands.id),
     businessId: text("business_id")
-      .references(() => business.id)
+      .references(() => businesses.id)
       .notNull(),
 
     // price and sale

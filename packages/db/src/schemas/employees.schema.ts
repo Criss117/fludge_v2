@@ -1,15 +1,15 @@
 import { primaryKey, text } from "drizzle-orm/sqlite-core";
 import { sqliteTable } from "drizzle-orm/sqlite-core";
 import { index } from "drizzle-orm/sqlite-core";
-import { business } from "./business.schema";
-import { auditMetadata } from "../helpers/audit-metadata";
+import { businesses } from "./businesses.schema";
+import { auditMetadata } from "./audit-metadata.schema";
 import { users } from "./users.schema";
 
 export const employees = sqliteTable(
   "employees",
   {
     businessId: text("business_id")
-      .references(() => business.id)
+      .references(() => businesses.id)
       .notNull(),
     userId: text("user_id")
       .references(() => users.id)

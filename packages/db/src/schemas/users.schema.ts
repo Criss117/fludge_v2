@@ -1,7 +1,7 @@
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { v4 } from "uuid";
 import { index } from "drizzle-orm/sqlite-core";
-import { auditMetadata } from "./helpers/audit-metadata";
+import { auditMetadata } from "./audit-metadata.schema";
 
 export const users = sqliteTable(
   "users",

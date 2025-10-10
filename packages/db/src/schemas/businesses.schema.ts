@@ -3,10 +3,10 @@ import { sqliteTable } from "drizzle-orm/sqlite-core";
 import { index } from "drizzle-orm/sqlite-core";
 import { v4 } from "uuid";
 import { users } from "./users.schema";
-import { auditMetadata } from "./helpers/audit-metadata";
+import { auditMetadata } from "./audit-metadata.schema";
 
-export const business = sqliteTable(
-  "business",
+export const businesses = sqliteTable(
+  "businesses",
   {
     id: text("id")
       .primaryKey()
@@ -36,10 +36,10 @@ export const business = sqliteTable(
     ...auditMetadata,
   },
   (t) => [
-    index("idx_business_nit").on(t.nit),
-    index("idx_business_name").on(t.name),
+    index("idx_businesses_nit").on(t.nit),
+    index("idx_businesses_name").on(t.name),
   ]
 );
 
-export type InsertBusiness = typeof business.$inferInsert;
-export type SelectBusiness = typeof business.$inferSelect;
+export type InsertBusiness = typeof businesses.$inferInsert;
+export type SelectBusiness = typeof businesses.$inferSelect;
