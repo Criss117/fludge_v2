@@ -4,9 +4,11 @@ import { BusinessesQueriesRepository } from './repositories/businesses-queries.r
 import { CreateBusinessUseCase } from './use-cases/create-business.usecase';
 import { FindOneBusinessUseCase } from './use-cases/find-one-business.usecase';
 import { DbModule } from '../db/db.module';
+import { BusinessesController } from './controllers/businesses.controller';
 
 @Module({
   imports: [DbModule],
+  controllers: [BusinessesController],
   providers: [
     // use cases
     CreateBusinessUseCase,

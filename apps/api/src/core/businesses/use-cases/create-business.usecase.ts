@@ -3,6 +3,7 @@ import { BusinessesCommandsRepository } from '../repositories/businesses-command
 import { BusinessesQueriesRepository } from '../repositories/businesses-queries.repository';
 import { CreateBusinessDto } from '../dtos/create-business.dto';
 import { BusinessAlreadyExistsException } from '../exceptions/business-already-exists.exception';
+import { slugify } from '@/core/shared/utils/slugify';
 
 @Injectable()
 export class CreateBusinessUseCase {
@@ -16,6 +17,7 @@ export class CreateBusinessUseCase {
       {
         name: data.name,
         nit: data.nit,
+        slug: slugify(data.name),
       },
       {
         ensureActive: true,
@@ -26,12 +28,15 @@ export class CreateBusinessUseCase {
       throw new BusinessAlreadyExistsException();
     }
 
+    const businessSlug = slugify(data.name);
+
     return this.businessesCommandsRepository.save({
       address: data.address,
       city: data.city,
       name: data.name,
       nit: data.nit,
       rootUserId,
+      slug: businessSlug,
     });
   }
 }

@@ -24,7 +24,10 @@ export class UserPermissionsGuard implements CanActivate {
     const req = context.switchToHttp().getRequest();
     const url = req.url as string;
 
-    if (!url.includes('business')) throw new InternalServerErrorException();
+    if (!url.includes('business'))
+      throw new InternalServerErrorException(
+        'Url no tiene el formato correcto',
+      );
 
     const permissions: Permission[] = this.reflector.get(
       META_PERMISSIONS,
@@ -35,12 +38,14 @@ export class UserPermissionsGuard implements CanActivate {
       throw new InternalServerErrorException('No permissions found');
 
     const user = req.user as UserDetail;
-    const businessId = req.params.id as string;
+    const businessSlug = req.params.businessSlug as string;
 
-    if (!user) throw new BadRequestException('User not found');
+    if (!user) throw new InternalServerErrorException('User not found');
+    if (!businessSlug)
+      throw new InternalServerErrorException('Business not found');
 
     const business = await this.findOneBusinessUseCase.execute(
-      businessId,
+      { slug: businessSlug },
       user.id,
     );
 

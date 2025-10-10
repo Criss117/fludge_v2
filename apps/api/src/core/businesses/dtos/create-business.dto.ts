@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import { IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class CreateBusinessDto {
@@ -10,6 +11,7 @@ export class CreateBusinessDto {
   @MinLength(3, {
     message: 'El nombre de la empresa debe tener un mínimo de 3 caracteres',
   })
+  @Transform(({ value }) => value?.trim())
   name: string;
 
   @IsString({
@@ -21,6 +23,7 @@ export class CreateBusinessDto {
   @MinLength(3, {
     message: 'El NIT debe tener un mínimo de 3 caracteres',
   })
+  @Transform(({ value }) => value?.trim())
   nit: string;
 
   @IsString({
@@ -32,6 +35,7 @@ export class CreateBusinessDto {
   @MinLength(3, {
     message: 'La dirección debe tener un mínimo de 3 caracteres',
   })
+  @Transform(({ value }) => value?.trim())
   address: string;
 
   @IsString({
@@ -43,6 +47,7 @@ export class CreateBusinessDto {
   @MinLength(3, {
     message: 'La ciudad debe tener un mínimo de 3 caracteres',
   })
+  @Transform(({ value }) => value?.trim())
   city: string;
 
   @IsString({
@@ -55,5 +60,6 @@ export class CreateBusinessDto {
     message: 'El estado debe tener un mínimo de 3 caracteres',
   })
   @IsOptional()
+  @Transform(({ value }) => value?.trim())
   state?: string | null;
 }

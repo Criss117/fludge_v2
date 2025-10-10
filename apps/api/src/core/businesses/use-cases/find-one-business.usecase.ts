@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { BusinessesQueriesRepository } from '../repositories/businesses-queries.repository';
 import { BusinessNotFoundException } from '../exceptions/business-no-exists.exception';
 import { UserCanNotAccessException } from '@/core/users/exceptions/user-cannot-access.exception';
+import type { FindOneBusinessDto } from '../repositories/dtos/find-one-business.dto';
 
 @Injectable()
 export class FindOneBusinessUseCase {
@@ -9,8 +10,12 @@ export class FindOneBusinessUseCase {
     private readonly businessesQueriesRepository: BusinessesQueriesRepository,
   ) {}
 
-  public async execute(id: string, logedUserId: string) {
-    const business = await this.businessesQueriesRepository.findOne(id, {
+  public async execute(meta: FindOneBusinessDto, logedUserId: string) {
+    if (!meta.id && !meta.slug) {
+      throw new BadRequestException('Invalid query');
+    }
+
+    const business = await this.businessesQueriesRepository.findOne(meta, {
       ensureActive: true,
     });
 

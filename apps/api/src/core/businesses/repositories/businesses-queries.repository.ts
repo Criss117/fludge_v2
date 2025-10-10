@@ -8,6 +8,7 @@ import {
   BusinessSummary,
 } from '@fludge/entities/business.entity';
 import { getTableColumns } from 'drizzle-orm';
+import type { FindOneBusinessDto } from './dtos/find-one-business.dto';
 
 type Options = {
   ensureActive?: boolean;
@@ -21,7 +22,7 @@ export class BusinessesQueriesRepository {
     meta: FindManyBusinessByDto,
     options?: Options,
   ): Promise<BusinessSummary[]> {
-    const { id, name, nit } = meta;
+    const { id, name, nit, slug } = meta;
 
     if (!id && !name && !nit) {
       throw new Error('Invalid query');
@@ -42,6 +43,10 @@ export class BusinessesQueriesRepository {
       filters.push(eq(businesses.nit, nit));
     }
 
+    if (slug) {
+      filters.push(eq(businesses.slug, slug));
+    }
+
     if (options?.ensureActive) {
       optionsFilters.push(eq(businesses.isActive, true));
     }
@@ -54,10 +59,15 @@ export class BusinessesQueriesRepository {
   }
 
   public async findOne(
-    id: string,
+    meta: FindOneBusinessDto,
     options?: Options,
   ): Promise<BusinessDetail | null> {
+    if (!meta.id && !meta.slug) {
+      throw new Error('Invalid query');
+    }
+
     const optionsFilters: SQL[] = [];
+    const filters: SQL[] = [];
     const groupsOptionsFilters: SQL[] = [];
     const employeesOptionsFilters: SQL[] = [];
     const productsOptionsFilters: SQL[] = [];
@@ -69,6 +79,14 @@ export class BusinessesQueriesRepository {
       productsOptionsFilters.push(eq(products.isActive, true));
     }
 
+    if (meta.id) {
+      filters.push(eq(businesses.id, meta.id));
+    }
+
+    if (meta.slug) {
+      filters.push(eq(businesses.slug, meta.slug));
+    }
+
     const [business] = await this.db
       .select({
         ...getTableColumns(businesses),
@@ -76,7 +94,7 @@ export class BusinessesQueriesRepository {
       })
       .from(businesses)
       .innerJoin(users, eq(businesses.rootUserId, users.id))
-      .where(and(eq(businesses.id, id), ...optionsFilters));
+      .where(and(...filters, ...optionsFilters));
 
     if (!business) {
       return null;
@@ -85,19 +103,23 @@ export class BusinessesQueriesRepository {
     const findGroupsPromise = this.db
       .select()
       .from(groups)
-      .where(and(eq(groups.businessId, id), ...groupsOptionsFilters));
+      .where(and(eq(groups.businessId, business.id), ...groupsOptionsFilters));
 
     const findEmployeesPromise = this.db
       .select({ ...getTableColumns(users) })
       .from(employees)
       .innerJoin(users, eq(employees.userId, users.id))
-      .where(and(eq(employees.businessId, id), ...employeesOptionsFilters))
+      .where(
+        and(eq(employees.businessId, business.id), ...employeesOptionsFilters),
+      )
       .groupBy(users.id);
 
     const countProductsPromise = this.db
       .select({ total: count(products.id) })
       .from(products)
-      .where(and(eq(products.businessId, id), ...productsOptionsFilters));
+      .where(
+        and(eq(products.businessId, business.id), ...productsOptionsFilters),
+      );
 
     const [groupsRes, employeesRes, [totalProducts]] = await Promise.all([
       findGroupsPromise,

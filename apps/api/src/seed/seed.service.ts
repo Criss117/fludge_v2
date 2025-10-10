@@ -21,6 +21,7 @@ import {
 import { fakerES as faker } from '@faker-js/faker';
 import { hashPassword } from '@/core/shared/utils/passwords.utils';
 import { allPermissions } from '@fludge/entities/permissions.entity';
+import { slugify } from '@/core/shared/utils/slugify';
 
 type Options = {
   totaRootUsers: number;
@@ -175,8 +176,12 @@ export class SeedService {
     const businessesToInsert: InsertBusiness[] = Array.from({
       length: insertedUsers.length * totalBusinessesPerRoot,
     }).map(() => {
+      const businessName = faker.company.name();
+      const businessSlug = slugify(businessName);
+
       return {
-        name: faker.company.name(),
+        name: businessName,
+        slug: businessSlug,
         address: faker.location.streetAddress(),
         city: faker.location.city(),
         state: faker.location.state(),
