@@ -13,6 +13,7 @@ export interface UserSummary extends AuditMetadata {
 }
 
 export interface UserDetail extends UserSummary {
+  password?: string | null;
   isRootIn?: BusinessSummary[] | null;
   isEmployeeIn?: (BusinessSummary & { groups: GroupSummary[] }) | null;
 }

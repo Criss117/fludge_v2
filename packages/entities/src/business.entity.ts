@@ -1,4 +1,5 @@
 import type { AuditMetadata } from "./audit-metadata";
+import { GroupSummary } from "./group.entity";
 import type { UserSummary } from "./user.entity";
 
 export interface BusinessSummary extends AuditMetadata {
@@ -14,4 +15,6 @@ export interface BusinessSummary extends AuditMetadata {
 export interface BusinessDetail extends BusinessSummary {
   employees: UserSummary[];
   rootUser: UserSummary;
+  groups: GroupSummary[];
+  totalProducts: number;
 }

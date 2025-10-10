@@ -21,6 +21,11 @@ export const businesses = sqliteTable(
     })
       .notNull()
       .unique(),
+    slug: text("slug", {
+      length: 100,
+    })
+      .notNull()
+      .unique(),
     address: text("address", {
       length: 255,
     }).notNull(),
