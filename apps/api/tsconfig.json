@@ -1,0 +1,9 @@
+{
+  "extends": "@fludge/typescript-config/nest.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}

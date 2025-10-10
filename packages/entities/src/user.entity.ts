@@ -8,13 +8,11 @@ export interface UserSummary extends AuditMetadata {
   lastName: string;
   email: string | null;
   username: string;
-  password: string;
   isRoot: boolean;
   isAccountValidated: boolean;
 }
 
 export interface UserDetail extends UserSummary {
-  groups: GroupSummary[];
-  isRootIn: BusinessSummary[];
-  isEmployeeIn: BusinessSummary | null;
+  isRootIn?: BusinessSummary[] | null;
+  isEmployeeIn?: (BusinessSummary & { groups: GroupSummary[] }) | null;
 }
