@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { GetBusiness } from '../decorators/get-business.decorator';
 import { CreateEmployeeUseCase } from '../use-cases/employees/create-employee.usecase';
 import { CreateEmployeeDto } from '@/core/users/dtos/create-employee.dto';
@@ -8,6 +16,9 @@ import { HTTPResponse } from '@/core/shared/http/response';
 import { FindOneEmployeeUseCase } from '../use-cases/employees/find-one-employee.usecase';
 import { UpdateEmployeeUseCase } from '../use-cases/employees/update-employee.usecase';
 import { UpdateEmployeeDto } from '@/core/users/dtos/update-employee.dto';
+import { AssignGroupsToEmployeeDto } from '../dtos/groups/assign-groups-to-employee.dto';
+import { AssignGroupsToEmployeeUseCase } from '../use-cases/employees/assign-groups-to-employee.usecase';
+import { RemoveGroupsFromEmployeeUseCase } from '../use-cases/employees/remove-groups-from-employee.usecase';
 
 @Controller('businesses/:businessSlug/employees')
 export class EmployeesController {
@@ -15,8 +26,8 @@ export class EmployeesController {
     private readonly createEmployeeUseCase: CreateEmployeeUseCase,
     private readonly findOneEmployeeUseCase: FindOneEmployeeUseCase,
     private readonly updateEmployeeUseCase: UpdateEmployeeUseCase,
-    // private readonly assignGroupsToEmployee: AssignGroupsToEmployeeUseCase,
-    // private readonly removeGroupsFromEmployee: RemoveGroupsFromEmployeeUseCase,
+    private readonly assignGroupsToEmployee: AssignGroupsToEmployeeUseCase,
+    private readonly removeGroupsFromEmployeeUseCase: RemoveGroupsFromEmployeeUseCase,
   ) {}
 
   @Post()
@@ -62,43 +73,38 @@ export class EmployeesController {
     return HTTPResponse.ok(null);
   }
 
-  // @Post(':employeeId/groups')
-  // @Permissions('users:update')
-  // public async assingGroups(
-  //   @GetBusiness('id') businessId: string,
-  //   @Param('employeeId') employeeId: string,
-  //   @Body() data: AssignGroupsToEmployeeDto,
-  // ) {
-  //   try {
-  //     await this.assignGroupsToEmployee.execute(businessId, employeeId, data);
+  @Post(':employeeId/groups')
+  @Permissions('users:update')
+  public async assingGroups(
+    @GetBusiness('id') businessId: string,
+    @Param('employeeId') employeeId: string,
+    @Body() data: AssignGroupsToEmployeeDto,
+  ) {
+    await safeAction(
+      () => this.assignGroupsToEmployee.execute(businessId, employeeId, data),
+      'Algo salió mal al asignar grupos al empleado',
+    );
 
-  //     return HTTPResponse.ok(null);
-  //   } catch (error) {
-  //     if (error instanceof HttpException) {
-  //       throw error;
-  //     }
+    return HTTPResponse.ok(null);
+  }
 
-  //     throw new InternalServerErrorException('Something went wrong');
-  //   }
-  // }
+  @Delete(':employeeId/groups')
+  @Permissions('users:update')
+  public async removeGroups(
+    @GetBusiness('id') businessId: string,
+    @Param('employeeId') employeeId: string,
+    @Body() data: AssignGroupsToEmployeeDto,
+  ) {
+    await safeAction(
+      () =>
+        this.removeGroupsFromEmployeeUseCase.execute(
+          businessId,
+          employeeId,
+          data,
+        ),
+      'Algo salió mal al eliminar grupos del empleado',
+    );
 
-  // @Delete(':employeeId/groups')
-  // @Permissions('users:update')
-  // public async removeGroups(
-  //   @GetBusiness('id') businessId: string,
-  //   @Param('employeeId') employeeId: string,
-  //   @Body() data: AssignGroupsToEmployeeDto,
-  // ) {
-  //   try {
-  //     await this.removeGroupsFromEmployee.execute(businessId, employeeId, data);
-
-  //     return HTTPResponse.ok(null);
-  //   } catch (error) {
-  //     if (error instanceof HttpException) {
-  //       throw error;
-  //     }
-
-  //     throw new InternalServerErrorException('Something went wrong');
-  //   }
-  // }
+    return HTTPResponse.ok(null);
+  }
 }

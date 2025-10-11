@@ -19,6 +19,8 @@ import { CreateEmployeeUseCase } from './use-cases/employees/create-employee.use
 import { FindOneEmployeeUseCase } from './use-cases/employees/find-one-employee.usecase';
 import { UsersModule } from '../users/users.module';
 import { UpdateEmployeeUseCase } from './use-cases/employees/update-employee.usecase';
+import { AssignGroupsToEmployeeUseCase } from './use-cases/employees/assign-groups-to-employee.usecase';
+import { RemoveGroupsFromEmployeeUseCase } from './use-cases/employees/remove-groups-from-employee.usecase';
 
 @Module({
   imports: [DbModule, UsersModule],
@@ -38,6 +40,8 @@ import { UpdateEmployeeUseCase } from './use-cases/employees/update-employee.use
     CreateEmployeeUseCase,
     FindOneEmployeeUseCase,
     UpdateEmployeeUseCase,
+    AssignGroupsToEmployeeUseCase,
+    RemoveGroupsFromEmployeeUseCase,
 
     // repositories
     BusinessesCommandsRepository,
