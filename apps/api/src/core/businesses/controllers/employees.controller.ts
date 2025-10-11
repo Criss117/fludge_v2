@@ -73,7 +73,7 @@ export class EmployeesController {
     return HTTPResponse.ok(null);
   }
 
-  @Post(':employeeId/groups')
+  @Patch(':employeeId/groups')
   @Permissions('users:update')
   public async assingGroups(
     @GetBusiness('id') businessId: string,

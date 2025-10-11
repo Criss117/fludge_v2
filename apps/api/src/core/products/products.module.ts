@@ -1,0 +1,43 @@
+import { Module } from '@nestjs/common';
+import { ProductsController } from './controllers/products.controller';
+import { ProductsQueriesRepository } from './repositories/products-queries.repository';
+import { CreateProductUsecase } from './use-cases/create-product.usecase';
+import { CategoriesController } from './controllers/categories.controller';
+import { CreateCategoryUsecase } from './use-cases/create-category.usecase';
+import { CategoriesCommandRepository } from './repositories/categories-command.repository';
+import { CategoriesQueriesRepository } from './repositories/categories-queries.repository';
+import { FindManyCategoriesUsecase } from './use-cases/find-many-categories.usecase';
+import { FindOneCategoryUsecase } from './use-cases/find-one-category.usecase';
+import { DeleteManyCategoriesUsecase } from './use-cases/delete-many-categories.usecase';
+import { UpdateCategoryUseCase } from './use-cases/update-category.usecase';
+import { FindManyProductsUseCase } from './use-cases/find-many-products.usecase';
+import { ProductsCommnadsRepository } from './repositories/products-commands.repository';
+import { FindOneProductUseCase } from './use-cases/find-one-product.usecase';
+import { UpdateProductUseCase } from './use-cases/update-product.usecase';
+import { DeleteProductUseCase } from './use-cases/delete-product.usecase';
+import { DbModule } from '../db/db.module';
+import { BusinessesModule } from '../businesses/businesses.module';
+
+@Module({
+  imports: [DbModule, BusinessesModule],
+  controllers: [ProductsController, CategoriesController],
+  providers: [
+    CreateProductUsecase,
+    CreateCategoryUsecase,
+    FindManyCategoriesUsecase,
+    FindOneCategoryUsecase,
+    DeleteManyCategoriesUsecase,
+    UpdateCategoryUseCase,
+
+    FindManyProductsUseCase,
+    FindOneProductUseCase,
+    UpdateProductUseCase,
+    DeleteProductUseCase,
+
+    CategoriesCommandRepository,
+    CategoriesQueriesRepository,
+    ProductsQueriesRepository,
+    ProductsCommnadsRepository,
+  ],
+})
+export class ProductsModule {}
