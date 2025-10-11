@@ -18,6 +18,7 @@ import { EmployeesController } from './controllers/employees.controller';
 import { CreateEmployeeUseCase } from './use-cases/employees/create-employee.usecase';
 import { FindOneEmployeeUseCase } from './use-cases/employees/find-one-employee.usecase';
 import { UsersModule } from '../users/users.module';
+import { UpdateEmployeeUseCase } from './use-cases/employees/update-employee.usecase';
 
 @Module({
   imports: [DbModule, UsersModule],
@@ -36,6 +37,7 @@ import { UsersModule } from '../users/users.module';
     // employees use cases
     CreateEmployeeUseCase,
     FindOneEmployeeUseCase,
+    UpdateEmployeeUseCase,
 
     // repositories
     BusinessesCommandsRepository,

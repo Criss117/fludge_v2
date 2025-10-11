@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpException,
-  InternalServerErrorException,
-  Param,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { GetBusiness } from '../decorators/get-business.decorator';
 import { CreateEmployeeUseCase } from '../use-cases/employees/create-employee.usecase';
 import { CreateEmployeeDto } from '@/core/users/dtos/create-employee.dto';
@@ -15,12 +6,15 @@ import { Permissions } from '@/core/auth/decorators/permissions.decorator';
 import { safeAction } from '@/core/shared/http/safe-action';
 import { HTTPResponse } from '@/core/shared/http/response';
 import { FindOneEmployeeUseCase } from '../use-cases/employees/find-one-employee.usecase';
+import { UpdateEmployeeUseCase } from '../use-cases/employees/update-employee.usecase';
+import { UpdateEmployeeDto } from '@/core/users/dtos/update-employee.dto';
 
 @Controller('businesses/:businessSlug/employees')
 export class EmployeesController {
   constructor(
     private readonly createEmployeeUseCase: CreateEmployeeUseCase,
     private readonly findOneEmployeeUseCase: FindOneEmployeeUseCase,
+    private readonly updateEmployeeUseCase: UpdateEmployeeUseCase,
     // private readonly assignGroupsToEmployee: AssignGroupsToEmployeeUseCase,
     // private readonly removeGroupsFromEmployee: RemoveGroupsFromEmployeeUseCase,
   ) {}
@@ -51,6 +45,21 @@ export class EmployeesController {
     );
 
     return HTTPResponse.ok(employee);
+  }
+
+  @Patch(':employeeId')
+  @Permissions('users:read')
+  public async updateEmployee(
+    @GetBusiness('id') businessId: string,
+    @Param('employeeId') employeeId: string,
+    @Body() data: UpdateEmployeeDto,
+  ) {
+    await safeAction(
+      () => this.updateEmployeeUseCase.execute(businessId, employeeId, data),
+      'Algo salió mal en la actualización del usuario',
+    );
+
+    return HTTPResponse.ok(null);
   }
 
   // @Post(':employeeId/groups')
