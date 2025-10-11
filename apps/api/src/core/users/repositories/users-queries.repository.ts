@@ -1,4 +1,4 @@
-import { and, eq, inArray, or, SQL } from 'drizzle-orm';
+import { and, eq, inArray, or, type SQL } from 'drizzle-orm';
 import { getTableColumns } from 'drizzle-orm';
 import { Inject, Injectable } from '@nestjs/common';
 import { businesses, employees, groups, users } from '@fludge/db';

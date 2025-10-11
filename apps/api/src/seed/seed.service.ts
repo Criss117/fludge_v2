@@ -200,9 +200,13 @@ export class SeedService {
     const groupsToInsert: InsertGroup[] = Array.from({
       length: insertedBusinesses.length * groupsPerBusiness,
     }).map(() => {
+      const name = faker.commerce.department();
+      const slug = slugify(name);
+
       return {
         businessId: faker.helpers.arrayElement(insertedBusinesses).id,
-        name: faker.commerce.department(),
+        name,
+        slug,
         description: faker.lorem.sentence(),
         permissions: faker.helpers.arrayElements(allPermissions),
       };

@@ -19,6 +19,7 @@ export async function safeAction<T>(
       ? `${messageError}: ${errorMessage}`
       : errorMessage;
 
-    throw new InternalServerErrorException(finalMessage);
+    console.error(finalMessage);
+    throw new InternalServerErrorException(errorMessage);
   }
 }

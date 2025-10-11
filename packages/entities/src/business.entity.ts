@@ -1,5 +1,5 @@
 import type { AuditMetadata } from "./audit-metadata";
-import { GroupSummary } from "./group.entity";
+import type { GroupSummary } from "./group.entity";
 import type { UserSummary } from "./user.entity";
 
 export interface BusinessSummary extends AuditMetadata {

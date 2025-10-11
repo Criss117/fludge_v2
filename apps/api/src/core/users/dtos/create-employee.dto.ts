@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import {
   IsArray,
   IsString,
@@ -22,6 +23,7 @@ export class CreateEmployeeDto {
   @MinLength(5, {
     message: 'El nombre de usuario debe tener como mínimo 5 caracteres',
   })
+  @Transform(({ value }) => value?.trim())
   username: string;
 
   @IsString({
@@ -33,6 +35,7 @@ export class CreateEmployeeDto {
   @MinLength(5, {
     message: 'El nombre del usuario debe tener como mínimo 5 caracteres',
   })
+  @Transform(({ value }) => value?.trim())
   firstName: string;
 
   @IsString({
@@ -44,6 +47,7 @@ export class CreateEmployeeDto {
   @MinLength(5, {
     message: 'El apellido del usuario debe tener como mínimo 5 caracteres',
   })
+  @Transform(({ value }) => value?.trim())
   lastName: string;
 
   @IsArray()

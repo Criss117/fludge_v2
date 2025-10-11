@@ -33,7 +33,7 @@ export class CreateEmployeeUserUseCase {
 
     const hashedPassword = await hashPassword(data.password);
 
-    return this.usersCommandsRepository.save(
+    const createdUser = await this.usersCommandsRepository.saveAndReturn(
       {
         firstName: data.firstName,
         lastName: data.lastName,
@@ -43,5 +43,9 @@ export class CreateEmployeeUserUseCase {
       },
       options,
     );
+
+    if (!createdUser) throw new Error('User not created');
+
+    return createdUser;
   }
 }

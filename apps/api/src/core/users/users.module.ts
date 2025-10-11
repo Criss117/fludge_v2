@@ -3,7 +3,6 @@ import { UsersCommandsRepository } from './repositories/users-commands.repositor
 import { UsersQueriesRepository } from './repositories/users-queries.repository';
 import { CreateRootUserUseCase } from './use-cases/create-root-user.usecase';
 import { CreateEmployeeUserUseCase } from './use-cases/create-employee-user.usecase';
-import { FindOneEmployeeUseCase } from './use-cases/find-one-employee.usecase';
 import { FindOneUserByUseCase } from './use-cases/find-one-user-by.usecase';
 import { DbModule } from '../db/db.module';
 
@@ -13,7 +12,6 @@ import { DbModule } from '../db/db.module';
     // use cases
     CreateRootUserUseCase,
     CreateEmployeeUserUseCase,
-    FindOneEmployeeUseCase,
     FindOneUserByUseCase,
 
     // repositories
@@ -21,9 +19,9 @@ import { DbModule } from '../db/db.module';
     UsersQueriesRepository,
   ],
   exports: [
-    FindOneEmployeeUseCase,
     FindOneUserByUseCase,
     CreateRootUserUseCase,
+    CreateEmployeeUserUseCase,
   ],
 })
 export class UsersModule {}

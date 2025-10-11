@@ -17,6 +17,9 @@ export const groups = sqliteTable(
     name: text("name", {
       length: 255,
     }).notNull(),
+    slug: text("slug", {
+      length: 255,
+    }).notNull(),
     description: text("description", {
       length: 255,
     }),

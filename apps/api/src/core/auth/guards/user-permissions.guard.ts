@@ -35,14 +35,14 @@ export class UserPermissionsGuard implements CanActivate {
     );
 
     if (!permissions.length)
-      throw new InternalServerErrorException('No permissions found');
+      throw new InternalServerErrorException('Permisos no encontrados');
 
     const user = req.user as UserDetail;
     const businessSlug = req.params.businessSlug as string;
 
-    if (!user) throw new InternalServerErrorException('User not found');
+    if (!user) throw new InternalServerErrorException('Usuario no encontrado');
     if (!businessSlug)
-      throw new InternalServerErrorException('Business not found');
+      throw new InternalServerErrorException('Slug de negocio no encontrado');
 
     const business = await this.findOneBusinessUseCase.execute(
       { slug: businessSlug },
