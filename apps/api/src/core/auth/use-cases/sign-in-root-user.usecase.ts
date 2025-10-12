@@ -40,6 +40,9 @@ export class SignInRootUserUseCase {
       id: user.id,
     });
 
-    return jwt;
+    return {
+      jwt,
+      user,
+    };
   }
 }

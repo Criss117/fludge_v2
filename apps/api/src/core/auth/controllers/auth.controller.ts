@@ -5,6 +5,7 @@ import {
   Get,
   HttpException,
   Post,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateRootUserDto } from 'src/core/users/dtos/create-root-user.dto';
 import { SignInDto, SignInEmployeeDto } from '../dtos/sign-in.dto';
@@ -45,12 +46,12 @@ export class AuthController {
   @Post('sign-in')
   @Public()
   public async signIn(@Body() data: SignInDto) {
-    const jwt = await safeAction(
+    const loggedUser = await safeAction(
       () => this.signInRootUserUseCase.execute(data),
       'Algo salió mal al intentar iniciar sesión como root',
     );
 
-    return HTTPResponse.ok(jwt);
+    return HTTPResponse.ok(loggedUser);
   }
 
   @Post('sign-in-employee')
@@ -72,6 +73,8 @@ export class AuthController {
   @Get('permissions')
   @Public()
   public findAllPermissions() {
+    throw new UnauthorizedException('Not implemented');
+
     return HTTPResponse.ok(allPermissions);
   }
 }
