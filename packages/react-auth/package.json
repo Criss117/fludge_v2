@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@fludge/react-auth",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./*": "./src/*.tsx"
+  },
+  "devDependencies": {
+    "@fludge/eslint-config": "workspace:*",
+    "@fludge/typescript-config": "workspace:*",
+    "@types/react": "^19.2.2",
+    "eslint": "^9.34.0",
+    "typescript": "5.9.2"
+  },
+  "dependencies": {
+    "@fludge/entities": "workspace:*",
+    "@fludge/api-utils": "workspace:*",
+    "react": "^19.2.0"
+  }
+}

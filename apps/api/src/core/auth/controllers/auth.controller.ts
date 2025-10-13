@@ -73,8 +73,6 @@ export class AuthController {
   @Get('permissions')
   @Public()
   public findAllPermissions() {
-    throw new UnauthorizedException('Not implemented');
-
     return HTTPResponse.ok(allPermissions);
   }
 }
