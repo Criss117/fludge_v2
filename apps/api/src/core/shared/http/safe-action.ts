@@ -15,11 +15,12 @@ export async function safeAction<T>(
     // Incluye detalles del error original si existe
     const errorMessage =
       error instanceof Error ? error.message : 'Error desconocido';
+
     const finalMessage = messageError
       ? `${messageError}: ${errorMessage}`
       : errorMessage;
 
     console.error(finalMessage);
-    throw new InternalServerErrorException(errorMessage);
+    throw new InternalServerErrorException(messageError);
   }
 }

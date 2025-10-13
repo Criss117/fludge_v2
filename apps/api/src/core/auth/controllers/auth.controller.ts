@@ -1,12 +1,4 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Get,
-  HttpException,
-  Post,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CreateRootUserDto } from 'src/core/users/dtos/create-root-user.dto';
 import { SignInDto, SignInEmployeeDto } from '../dtos/sign-in.dto';
 import { SignInRootUserUseCase } from '../use-cases/sign-in-root-user.usecase';
@@ -30,17 +22,12 @@ export class AuthController {
   @Post('sign-up')
   @Public()
   public async create(@Body() data: CreateRootUserDto) {
-    try {
-      await this.signUpRootUserUseCase.execute(data);
+    await safeAction(
+      () => this.signUpRootUserUseCase.execute(data),
+      'Algo salió mal al intentar crear la cuenta',
+    );
 
-      return HTTPResponse.created(null);
-    } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
-
-      throw new BadRequestException('Something went wrong');
-    }
+    return HTTPResponse.created(null);
   }
 
   @Post('sign-in')

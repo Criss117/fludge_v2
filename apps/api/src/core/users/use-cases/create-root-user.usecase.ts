@@ -23,9 +23,7 @@ export class CreateRootUserUseCase {
       },
     );
 
-    if (existingUsers.length > 0) {
-      throw new UserAlreadyExistsException();
-    }
+    if (existingUsers.length > 0) throw new UserAlreadyExistsException();
 
     const passwordHashed = await hashPassword(data.password);
 

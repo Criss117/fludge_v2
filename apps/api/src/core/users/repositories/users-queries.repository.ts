@@ -40,7 +40,7 @@ export class UsersQueriesRepository {
     return this.db
       .select()
       .from(users)
-      .where(and(...filters, ...optionsFilters));
+      .where(and(or(...filters), ...optionsFilters));
   }
 
   public async findOneBy(
