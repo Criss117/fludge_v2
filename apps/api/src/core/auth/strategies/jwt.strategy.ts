@@ -22,9 +22,7 @@ export class JWTStrategy extends PassportStrategy(Strategy) {
   }
 
   public async validate(payload: JWTPayload): Promise<UserDetail> {
-    const user = await this.findOneUserByUseCase.execute({
-      id: payload.id,
-    });
+    const user = await this.findOneUserByUseCase.execute(payload.id);
 
     if (!user) throw new UserNotFoundException();
 

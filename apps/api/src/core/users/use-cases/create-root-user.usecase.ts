@@ -13,7 +13,7 @@ export class CreateRootUserUseCase {
   ) {}
 
   public async execute(data: CreateRootUserDto) {
-    const existingUsers = await this.usersQueriesRepository.findManyBy(
+    const existingUsers = await this.usersQueriesRepository.findOneBy(
       {
         email: data.email,
         username: data.username,
@@ -23,7 +23,7 @@ export class CreateRootUserUseCase {
       },
     );
 
-    if (existingUsers.length > 0) throw new UserAlreadyExistsException();
+    if (existingUsers) throw new UserAlreadyExistsException();
 
     const passwordHashed = await hashPassword(data.password);
 

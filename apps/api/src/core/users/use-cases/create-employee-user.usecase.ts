@@ -18,7 +18,7 @@ export class CreateEmployeeUserUseCase {
   ) {}
 
   public async execute(data: CreateEmployeeDto, options?: Options) {
-    const existingUsers = await this.usersQueriesRepository.findManyBy(
+    const existingUsers = await this.usersQueriesRepository.findOneBy(
       {
         username: data.username,
       },
@@ -27,9 +27,7 @@ export class CreateEmployeeUserUseCase {
       },
     );
 
-    if (existingUsers.length > 0) {
-      throw new UserAlreadyExistsException();
-    }
+    if (existingUsers) throw new UserAlreadyExistsException();
 
     const hashedPassword = await hashPassword(data.password);
 

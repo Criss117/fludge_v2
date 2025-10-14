@@ -3,10 +3,8 @@ import { getTableColumns } from 'drizzle-orm';
 import { Inject, Injectable } from '@nestjs/common';
 import { businesses, employees, groups, users } from '@fludge/db';
 import { DBSERVICE, type LibSQLDatabase } from 'src/core/db/db.module';
-import type { UserDetail } from '@fludge/entities/user.entity';
-import type { EmployeeDetail } from '@fludge/entities/employee.entity';
+import type { UserDetail, UserSummary } from '@fludge/entities/user.entity';
 import type { FindManyUsersByDto } from './dtos/find-many-users-by.dto';
-import type { FindOneEmployeeDto } from './dtos/find-one-employee.dto';
 
 type Options = {
   ensureActive?: boolean;
@@ -17,7 +15,10 @@ type Options = {
 export class UsersQueriesRepository {
   constructor(@Inject(DBSERVICE) private readonly db: LibSQLDatabase) {}
 
-  public async findManyBy(meta: FindManyUsersByDto, options?: Options) {
+  public async findManyBy(
+    meta: FindManyUsersByDto,
+    options?: Options,
+  ): Promise<UserSummary[]> {
     const filters: SQL[] = [];
     const optionsFilters: SQL[] = [];
 
@@ -37,30 +38,24 @@ export class UsersQueriesRepository {
       optionsFilters.push(eq(users.isActive, true));
     }
 
-    return this.db
+    const response = await this.db
       .select()
       .from(users)
       .where(and(or(...filters), ...optionsFilters));
+
+    if (!options?.returnPassword) return response;
+
+    return response.map((user) => ({
+      ...user,
+      password: undefined,
+    }));
   }
 
-  public async findOneBy(
-    meta: FindManyUsersByDto,
+  public async findOne(
+    userId: string,
     options?: Options,
   ): Promise<UserDetail | null> {
-    const filters: SQL[] = [];
     const optionsFilters: SQL[] = [];
-
-    if (meta.email) {
-      filters.push(eq(users.email, meta.email));
-    }
-
-    if (meta.username) {
-      filters.push(eq(users.username, meta.username));
-    }
-
-    if (meta.id) {
-      filters.push(eq(users.id, meta.id));
-    }
 
     if (options?.ensureActive) {
       optionsFilters.push(eq(users.isActive, true));
@@ -69,7 +64,7 @@ export class UsersQueriesRepository {
     const [user] = await this.db
       .select()
       .from(users)
-      .where(and(...filters, ...optionsFilters));
+      .where(and(eq(users.id, userId), ...optionsFilters));
 
     if (!user) {
       return null;
@@ -128,52 +123,39 @@ export class UsersQueriesRepository {
     };
   }
 
-  public async findOneEmployee(
-    meta: FindOneEmployeeDto,
+  public async findOneBy(
+    meta: FindManyUsersByDto,
     options?: Options,
-  ): Promise<EmployeeDetail | null> {
+  ): Promise<UserSummary | null> {
+    const filters: SQL[] = [];
     const optionsFilters: SQL[] = [];
+
+    if (meta.email) {
+      filters.push(eq(users.email, meta.email));
+    }
+
+    if (meta.username) {
+      filters.push(eq(users.username, meta.username));
+    }
+
+    if (meta.id) {
+      filters.push(eq(users.id, meta.id));
+    }
 
     if (options?.ensureActive) {
       optionsFilters.push(eq(users.isActive, true));
     }
 
     const [user] = await this.db
-      .select({
-        ...getTableColumns(users),
-        groupIds: employees.groupIds,
-      })
-      .from(users)
-      .leftJoin(
-        employees,
-        and(
-          eq(employees.userId, meta.userId),
-          eq(employees.businessId, meta.businessId),
-        ),
-      )
-      .where(and(eq(users.id, meta.userId), ...optionsFilters));
-
-    if (!user) {
-      return null;
-    }
-
-    if (!user.groupIds) {
-      return {
-        ...user,
-        employeeIn: meta.businessId,
-        groups: [],
-      };
-    }
-
-    const groupsSummary = await this.db
       .select()
-      .from(groups)
-      .where(inArray(groups.id, user.groupIds));
+      .from(users)
+      .where(and(...filters, ...optionsFilters));
+
+    if (!user) return null;
 
     return {
       ...user,
-      employeeIn: meta.businessId,
-      groups: groupsSummary,
+      password: options?.returnPassword ? user.password : undefined,
     };
   }
 }

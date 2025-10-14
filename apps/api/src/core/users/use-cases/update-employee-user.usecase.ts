@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UsersQueriesRepository } from '../repositories/users-queries.repository';
 import { UsersCommandsRepository } from '../repositories/users-commands.repository';
 import { UserNotFoundException } from '../exceptions/user-not-found.exception';
@@ -13,11 +13,19 @@ export class UpdateEmployeeUserUseCase {
   ) {}
 
   public async execute(userId: string, data: UpdateEmployeeDto) {
-    const [existingUser] = await this.usersQueriesRepository.findManyBy({
-      id: userId,
-    });
+    const existingUser = await this.usersQueriesRepository.findOneBy(
+      {
+        id: userId,
+      },
+      {
+        ensureActive: true,
+        returnPassword: true,
+      },
+    );
 
     if (!existingUser) throw new UserNotFoundException();
+    if (!existingUser.password)
+      throw new InternalServerErrorException("Password can't be empty");
 
     if (data.username && data.username !== existingUser.username) {
       const existingUsers = await this.usersQueriesRepository.findManyBy({
