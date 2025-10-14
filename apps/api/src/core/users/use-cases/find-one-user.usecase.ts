@@ -1,29 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { UsersQueriesRepository } from '../repositories/users-queries.repository';
-import { FindManyUsersByDto } from '../repositories/dtos/find-many-users-by.dto';
 import { UserNotFoundException } from '../exceptions/user-not-found.exception';
 
 type Options = {
   returnPassword?: boolean;
-  ensureActive?: boolean;
 };
 
 @Injectable()
-export class FindOneUserByUseCase {
+export class FindOneUserUseCase {
   constructor(
     private readonly usersQueriesRepository: UsersQueriesRepository,
   ) {}
 
-  public async execute(
-    meta: FindManyUsersByDto,
-    options: Options = {
+  public async execute(userId: string, options?: Options) {
+    const user = await this.usersQueriesRepository.findOne(userId, {
       ensureActive: true,
-      returnPassword: false,
-    },
-  ) {
-    const user = await this.usersQueriesRepository.findOneBy(meta, options);
+      returnPassword: options?.returnPassword,
+    });
 
-    if (!user) throw new UserNotFoundException();
+    if (!user) {
+      throw new UserNotFoundException();
+    }
 
     return user;
   }
