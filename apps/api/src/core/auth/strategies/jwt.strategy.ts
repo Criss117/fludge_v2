@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { JWTPayload } from '../dtos/jwt-payload.dto';
-import { FindOneUserByUseCase } from '@/core/users/use-cases/find-one-user-by.usecase';
+import { FindOneUserByUseCase } from '@/core/users/use-cases/find-one-user.usecase';
 import { UserDetail } from '@fludge/entities/user.entity';
 import { UserNotFoundException } from '@/core/users/exceptions/user-not-found.exception';
 

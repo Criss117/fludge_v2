@@ -3,8 +3,8 @@ import { JwtService } from '@nestjs/jwt';
 import { BadCredentialsException } from '../exceptions/unauthorized.exception';
 import { SignInEmployeeDto } from '../dtos/sign-in.dto';
 import { comparePasswords } from '@/core/shared/utils/passwords.utils';
-import { FindOneUserByUseCase } from '@/core/users/use-cases/find-one-user-by.usecase';
 import { UserNotFoundException } from '@/core/users/exceptions/user-not-found.exception';
+import { FindOneUserByUseCase } from '@/core/users/use-cases/find-one-user-by.usecase';
 
 @Injectable()
 export class SignInEmployeeUseCase {
@@ -23,18 +23,14 @@ export class SignInEmployeeUseCase {
       },
     );
 
-    if (!user || !user.password) {
-      throw new UserNotFoundException();
-    }
+    if (!user || !user.password) throw new UserNotFoundException();
 
     const resultOfComparison = await comparePasswords(
       meta.password,
       user.password,
     );
 
-    if (!resultOfComparison) {
-      throw new BadCredentialsException();
-    }
+    if (!resultOfComparison) throw new BadCredentialsException();
 
     const jwt = this.jwtService.sign({
       id: user.id,
