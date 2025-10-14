@@ -1,7 +1,7 @@
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import type { UserDetail } from "@fludge/entities/user.entity";
 import { routeTree } from "../../routeTree.gen";
-import type { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 export interface RouterContext {
   user: UserDetail | null;
@@ -24,12 +24,14 @@ declare module "@tanstack/react-router" {
 }
 
 export function Router() {
+  const queryClient = useQueryClient();
+
   return (
     <RouterProvider
       router={router}
       context={{
         user: null,
-        queryClient: null,
+        queryClient: queryClient,
       }}
     />
   );

@@ -10,6 +10,7 @@ export interface BusinessSummary extends AuditMetadata {
   city: string;
   state: string | null;
   rootUserId: string;
+  slug: string;
 }
 
 export interface BusinessDetail extends BusinessSummary {

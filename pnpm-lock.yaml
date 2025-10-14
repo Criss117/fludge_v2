@@ -310,7 +310,7 @@ importers:
         specifier: ^19.1.1
         version: 19.2.0(react@19.2.0)
       react-hook-form:
-        specifier: ^7.65.0
+        specifier: 7.65.0
         version: 7.65.0(react@19.2.0)
       react-resizable-panels:
         specifier: ^3.0.6
@@ -10838,7 +10838,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 22.15.3
+      '@types/node': 24.7.0
       merge-stream: 2.0.0
       supports-color: 8.1.1
 

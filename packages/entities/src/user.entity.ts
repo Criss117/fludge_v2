@@ -10,10 +10,10 @@ export interface UserSummary extends AuditMetadata {
   username: string;
   isRoot: boolean;
   isAccountValidated: boolean;
+  password?: string | null;
 }
 
 export interface UserDetail extends UserSummary {
-  password?: string | null;
   isRootIn?: BusinessSummary[] | null;
   isEmployeeIn?: (BusinessSummary & { groups: GroupSummary[] }) | null;
 }

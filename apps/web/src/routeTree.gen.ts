@@ -10,33 +10,116 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BusinessesSelectBusinessRouteImport } from './routes/businesses/select-business'
+import { Route as BusinessesRegisterRouteImport } from './routes/businesses/register'
+import { Route as BusinessesBusinessslugRouteImport } from './routes/businesses/$businessslug'
+import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
+import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
+import { Route as AuthEmployeeSignInRouteImport } from './routes/auth/employee/sign-in'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BusinessesSelectBusinessRoute =
+  BusinessesSelectBusinessRouteImport.update({
+    id: '/businesses/select-business',
+    path: '/businesses/select-business',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const BusinessesRegisterRoute = BusinessesRegisterRouteImport.update({
+  id: '/businesses/register',
+  path: '/businesses/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BusinessesBusinessslugRoute = BusinessesBusinessslugRouteImport.update({
+  id: '/businesses/$businessslug',
+  path: '/businesses/$businessslug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthSignUpRoute = AuthSignUpRouteImport.update({
+  id: '/auth/sign-up',
+  path: '/auth/sign-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthSignInRoute = AuthSignInRouteImport.update({
+  id: '/auth/sign-in',
+  path: '/auth/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthEmployeeSignInRoute = AuthEmployeeSignInRouteImport.update({
+  id: '/auth/employee/sign-in',
+  path: '/auth/employee/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
+  '/businesses/$businessslug': typeof BusinessesBusinessslugRoute
+  '/businesses/register': typeof BusinessesRegisterRoute
+  '/businesses/select-business': typeof BusinessesSelectBusinessRoute
+  '/auth/employee/sign-in': typeof AuthEmployeeSignInRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
+  '/businesses/$businessslug': typeof BusinessesBusinessslugRoute
+  '/businesses/register': typeof BusinessesRegisterRoute
+  '/businesses/select-business': typeof BusinessesSelectBusinessRoute
+  '/auth/employee/sign-in': typeof AuthEmployeeSignInRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
+  '/businesses/$businessslug': typeof BusinessesBusinessslugRoute
+  '/businesses/register': typeof BusinessesRegisterRoute
+  '/businesses/select-business': typeof BusinessesSelectBusinessRoute
+  '/auth/employee/sign-in': typeof AuthEmployeeSignInRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
+    | '/businesses/$businessslug'
+    | '/businesses/register'
+    | '/businesses/select-business'
+    | '/auth/employee/sign-in'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
+    | '/businesses/$businessslug'
+    | '/businesses/register'
+    | '/businesses/select-business'
+    | '/auth/employee/sign-in'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
+    | '/businesses/$businessslug'
+    | '/businesses/register'
+    | '/businesses/select-business'
+    | '/auth/employee/sign-in'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthSignInRoute: typeof AuthSignInRoute
+  AuthSignUpRoute: typeof AuthSignUpRoute
+  BusinessesBusinessslugRoute: typeof BusinessesBusinessslugRoute
+  BusinessesRegisterRoute: typeof BusinessesRegisterRoute
+  BusinessesSelectBusinessRoute: typeof BusinessesSelectBusinessRoute
+  AuthEmployeeSignInRoute: typeof AuthEmployeeSignInRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +131,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/businesses/select-business': {
+      id: '/businesses/select-business'
+      path: '/businesses/select-business'
+      fullPath: '/businesses/select-business'
+      preLoaderRoute: typeof BusinessesSelectBusinessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/businesses/register': {
+      id: '/businesses/register'
+      path: '/businesses/register'
+      fullPath: '/businesses/register'
+      preLoaderRoute: typeof BusinessesRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/businesses/$businessslug': {
+      id: '/businesses/$businessslug'
+      path: '/businesses/$businessslug'
+      fullPath: '/businesses/$businessslug'
+      preLoaderRoute: typeof BusinessesBusinessslugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/sign-up': {
+      id: '/auth/sign-up'
+      path: '/auth/sign-up'
+      fullPath: '/auth/sign-up'
+      preLoaderRoute: typeof AuthSignUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/sign-in': {
+      id: '/auth/sign-in'
+      path: '/auth/sign-in'
+      fullPath: '/auth/sign-in'
+      preLoaderRoute: typeof AuthSignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/employee/sign-in': {
+      id: '/auth/employee/sign-in'
+      path: '/auth/employee/sign-in'
+      fullPath: '/auth/employee/sign-in'
+      preLoaderRoute: typeof AuthEmployeeSignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthSignInRoute: AuthSignInRoute,
+  AuthSignUpRoute: AuthSignUpRoute,
+  BusinessesBusinessslugRoute: BusinessesBusinessslugRoute,
+  BusinessesRegisterRoute: BusinessesRegisterRoute,
+  BusinessesSelectBusinessRoute: BusinessesSelectBusinessRoute,
+  AuthEmployeeSignInRoute: AuthEmployeeSignInRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

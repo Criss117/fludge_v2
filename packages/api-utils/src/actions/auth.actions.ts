@@ -33,6 +33,8 @@ export class AuthActions {
       >(API_ENDPOINTS.AUTH.SIGN_IN_ROOT, data)
     );
 
+    console.log({ res });
+
     return res;
   }
 

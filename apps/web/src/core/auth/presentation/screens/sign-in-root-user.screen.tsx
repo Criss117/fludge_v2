@@ -1,0 +1,48 @@
+import { Link } from "@tanstack/react-router";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/core/shared/components/ui/card";
+import { Button } from "@/core/shared/components/ui/button";
+import { SignInRootUserForm } from "../components/sign-in-root-user-form";
+
+export function SignInRootUserScreen() {
+  return (
+    <section className="w-full min-h-screen flex items-center justify-center">
+      <Card className="w-full max-w-xl">
+        <CardHeader>
+          <h1 className="text-5xl text-primary font-bold text-center">
+            Fludge
+          </h1>
+          <CardTitle className="text-2xl font-bold">Inicia sesión</CardTitle>
+          <CardDescription>
+            Inicia sesión con tu cuenta de Fludge
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-5">
+          <SignInRootUserForm.Root>
+            <SignInRootUserForm.Content>
+              <fieldset className="space-y-5">
+                <SignInRootUserForm.Email />
+                <SignInRootUserForm.Password />
+                <SignInRootUserForm.Submit />
+              </fieldset>
+            </SignInRootUserForm.Content>
+          </SignInRootUserForm.Root>
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <Button asChild variant="link">
+            <Link to="/auth/employee/sign-in">Inicia Sesión como Empleado</Link>
+          </Button>
+          <Button asChild variant="link">
+            <Link to="/auth/sign-up">No tienes una cuenta? Crea una</Link>
+          </Button>
+        </CardFooter>
+      </Card>
+    </section>
+  );
+}
