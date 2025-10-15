@@ -4,12 +4,12 @@ import {
   SidebarFooter,
   SidebarHeader,
 } from "@/core/shared/components/ui/sidebar";
-import type { BusinessDetail } from "@repo/core/entities/business";
 
 import { BusinessSwitcher } from "./business-switcher";
 import { BusinessSidebarFooter } from "./footer";
 import { NavMain } from "./nav-main";
 import { NavSettings } from "./nav-settings";
+import type { BusinessDetail } from "@fludge/entities/business.entity";
 
 interface Props {
   currentBusiness: BusinessDetail;

@@ -13,6 +13,7 @@
     "@fludge/api-utils": "workspace:*",
     "@fludge/entities": "workspace:*",
     "@fludge/react-auth": "workspace:*",
+    "@fludge/react-query": "workspace:*",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",

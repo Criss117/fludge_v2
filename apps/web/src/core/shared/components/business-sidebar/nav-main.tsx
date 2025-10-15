@@ -7,7 +7,6 @@ import {
   SquareChartGantt,
   Users2Icon,
 } from "lucide-react";
-import type { BusinessDetail } from "@repo/core/entities/business";
 
 import {
   SidebarGroup,
@@ -17,6 +16,7 @@ import {
   SidebarMenuItem,
 } from "@/core/shared/components/ui/sidebar";
 import { cn } from "@/core/shared/lib/utils";
+import type { BusinessDetail } from "@fludge/entities/business.entity";
 
 interface Props {
   currentBusiness: BusinessDetail;
@@ -26,32 +26,32 @@ const mainItems = [
   {
     title: "Inicio",
     icon: Home,
-    href: "/business/$id",
+    href: "/businesses/$businessslug",
   },
   {
     title: "Clientes",
     icon: Users2Icon,
-    href: "/business/$id/clients",
+    href: "/businesses/$businessslug/clients",
   },
   {
     title: "Productos",
     icon: SquareChartGantt,
-    href: "/business/$id/products",
+    href: "/businesses/$businessslug/products",
   },
   {
     title: "Categorias",
     icon: ChartColumnStackedIcon,
-    href: "/business/$id/categories",
+    href: "/businesses/$businessslug/categories",
   },
   {
     title: "Proveedores",
     icon: Building2Icon,
-    href: "/business/$id/providers",
+    href: "/businesses/$businessslug/providers",
   },
   {
     title: "Ventas",
     icon: HandCoins,
-    href: "/business/$id/sales",
+    href: "/businesses/$businessslug/sales",
   },
 ] as const;
 
@@ -72,7 +72,10 @@ export function NavMain({ currentBusiness }: Props) {
                     location.pathname && "bg-sidebar-accent"
                 )}
               >
-                <Link to={item.href} params={{ id: currentBusiness.id }}>
+                <Link
+                  to={item.href}
+                  params={{ businessslug: currentBusiness.slug }}
+                >
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                 </Link>

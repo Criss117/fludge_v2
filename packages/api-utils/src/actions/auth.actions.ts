@@ -5,11 +5,14 @@ import type { UserDetail } from "@fludge/entities/user.entity";
 import { API } from "../api";
 import { API_ENDPOINTS } from "../api-endpoints";
 import { safeAction } from "../safe-action";
+import { CommonResponse } from "../common-response";
 
 export class AuthActions {
   constructor(private readonly api: API) {}
 
-  public async signUp(data: CreateRootUserSchema) {
+  public async signUp(
+    data: CreateRootUserSchema
+  ): Promise<CommonResponse<null>> {
     const res = await safeAction(
       () =>
         this.api.post<null, CreateRootUserSchema>(
@@ -22,7 +25,12 @@ export class AuthActions {
     return res;
   }
 
-  public async signIn(data: SignInRootUserSchema) {
+  public async signIn(data: SignInRootUserSchema): Promise<
+    CommonResponse<{
+      jwt: string;
+      user: UserDetail;
+    }>
+  > {
     const res = await safeAction(() =>
       this.api.post<
         {
@@ -33,12 +41,10 @@ export class AuthActions {
       >(API_ENDPOINTS.AUTH.SIGN_IN_ROOT, data)
     );
 
-    console.log({ res });
-
     return res;
   }
 
-  public async getProfile(token?: string) {
+  public async getProfile(token?: string): Promise<CommonResponse<UserDetail>> {
     if (token) {
       await this.api.applyAuthInterceptor(token);
     }
@@ -51,7 +57,7 @@ export class AuthActions {
     return res;
   }
 
-  public async findAllPermissions() {
+  public async findAllPermissions(): Promise<CommonResponse<Permission[]>> {
     const res = await safeAction(
       () => this.api.get<Permission[]>(API_ENDPOINTS.AUTH.FIND_ALL_PERMISSIONS),
       "Error al obtener permisos"

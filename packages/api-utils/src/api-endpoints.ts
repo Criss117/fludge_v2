@@ -7,7 +7,8 @@ export const API_ENDPOINTS = {
     FIND_ALL_PERMISSIONS: "/auth/permissions",
   },
   BUSINESSES: {
-    FIND_ONE: (id: string) => `/businesses/${id}` as `/businesses/${string}`,
+    FIND_ONE: (businessSlug: string) =>
+      `/businesses/${businessSlug}` as `/businesses/${string}`,
     CREATE: "/businesses",
     GROUPS: {
       FIND_ONE: (businessSlug: string, groupId: string) =>

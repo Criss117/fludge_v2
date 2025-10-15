@@ -62,7 +62,7 @@ export function AuthProvider({
   const [isPending, setIsPending] = useState(true);
   const [user, setUser] = useState<UserDetail | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [status, setStatus] = useState<AuthStatus>("authenticated");
+  const [status, setStatus] = useState<AuthStatus>("unauthenticated");
   const [error, setError] = useState<string | null>(null);
 
   const signInRootUser = async (
@@ -152,7 +152,7 @@ export function AuthProvider({
   }, []);
 
   if (isPending) {
-    <>{PendingComponent}</>;
+    return <>{PendingComponent}</>;
   }
 
   return (

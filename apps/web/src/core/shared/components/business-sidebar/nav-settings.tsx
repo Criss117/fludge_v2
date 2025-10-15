@@ -1,5 +1,4 @@
 import { GroupIcon, IdCardIcon, Settings } from "lucide-react";
-import type { BusinessDetail } from "@repo/core/entities/business";
 import { Link, useLocation } from "@tanstack/react-router";
 import {
   SidebarGroup,
@@ -10,6 +9,7 @@ import {
   SidebarMenuItem,
 } from "@/core/shared/components/ui/sidebar";
 import { cn } from "@/core/shared/lib/utils";
+import type { BusinessDetail } from "@fludge/entities/business.entity";
 
 interface Props {
   currentBusiness: BusinessDetail;
@@ -19,17 +19,17 @@ const settingsItems = [
   {
     title: "Grupos",
     icon: GroupIcon,
-    href: "/business/$id/groups",
+    href: "/businesses/$businessslug/groups",
   },
   {
     title: "Empleados",
     icon: IdCardIcon,
-    href: "/business/$id/employees",
+    href: "/businesses/$businessslug/employees",
   },
   {
     title: "Configuración",
     icon: Settings,
-    href: "/business/$id/settings",
+    href: "/businesses/$businessslug/settings",
   },
 ] as const;
 
@@ -51,7 +51,10 @@ export function NavSettings({ currentBusiness }: Props) {
                     location.pathname && "bg-sidebar-accent"
                 )}
               >
-                <Link to={item.href} params={{ id: currentBusiness.id }}>
+                <Link
+                  to={item.href}
+                  params={{ businessslug: currentBusiness.slug }}
+                >
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                 </Link>

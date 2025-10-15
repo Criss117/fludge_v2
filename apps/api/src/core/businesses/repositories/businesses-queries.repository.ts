@@ -127,6 +127,10 @@ export class BusinessesQueriesRepository {
 
     return {
       ...business,
+      rootUser: {
+        ...business.rootUser,
+        password: undefined,
+      },
       employees: employeesRes,
       groups: groupsRes,
       totalProducts: totalProducts?.total ?? 0,

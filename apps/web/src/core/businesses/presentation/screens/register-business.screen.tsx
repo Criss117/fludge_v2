@@ -24,16 +24,18 @@ export function RegisterBusinessScreen() {
         </CardHeader>
         <CardContent className="space-y-5">
           <RegisterBusinessForm.Root>
-            <fieldset className="space-y-5">
-              <RegisterBusinessForm.Name />
-              <RegisterBusinessForm.NIT />
-              <RegisterBusinessForm.Address />
-              <fieldset className="flex gap-x-2">
-                <RegisterBusinessForm.City />
-                <RegisterBusinessForm.State />
+            <RegisterBusinessForm.Content>
+              <fieldset className="space-y-5">
+                <RegisterBusinessForm.Name />
+                <RegisterBusinessForm.NIT />
+                <RegisterBusinessForm.Address />
+                <fieldset className="flex gap-x-2">
+                  <RegisterBusinessForm.City />
+                  <RegisterBusinessForm.State />
+                </fieldset>
+                <RegisterBusinessForm.Submit />
               </fieldset>
-              <RegisterBusinessForm.Submit />
-            </fieldset>
+            </RegisterBusinessForm.Content>
           </RegisterBusinessForm.Root>
         </CardContent>
       </Card>

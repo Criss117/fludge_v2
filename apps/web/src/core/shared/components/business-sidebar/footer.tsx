@@ -6,7 +6,6 @@ import {
   LogOut,
   Sparkles,
 } from "lucide-react";
-import { useAuth } from "@/core/auth/application/providers/auth.provider";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,12 +22,11 @@ import {
   useSidebar,
 } from "@/core/shared/components/ui/sidebar";
 import { Avatar, AvatarFallback } from "@/core/shared/components/ui/avatar";
-import { useRouter } from "@tanstack/react-router";
+import { useAuth } from "@fludge/react-auth/auth.provider";
 import { avatarFallback } from "@/core/shared/lib/utils";
 
 export function BusinessSidebarFooter() {
-  const { user, signOut } = useAuth();
-  const router = useRouter();
+  const { user } = useAuth();
   const { isMobile } = useSidebar();
 
   if (!user) {
@@ -98,16 +96,7 @@ export function BusinessSidebarFooter() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() =>
-                signOut({
-                  onSuccess: () =>
-                    router.navigate({
-                      to: "/auth/sign-in",
-                    }),
-                })
-              }
-            >
+            <DropdownMenuItem>
               <LogOut />
               Cerrar sesión
             </DropdownMenuItem>

@@ -12,7 +12,6 @@ export async function safeAction<T>(
     return res.data;
   } catch (error) {
     if (error instanceof AxiosError) {
-      console.log({ error: error.response?.data });
       return error.response?.data;
     }
 

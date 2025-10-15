@@ -15,7 +15,7 @@ import { Route as BusinessesRegisterRouteImport } from './routes/businesses/regi
 import { Route as BusinessesBusinessslugRouteImport } from './routes/businesses/$businessslug'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
-import { Route as AuthEmployeeSignInRouteImport } from './routes/auth/employee/sign-in'
+import { Route as BusinessesBusinessslugIndexRouteImport } from './routes/businesses/$businessslug/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -48,39 +48,39 @@ const AuthSignInRoute = AuthSignInRouteImport.update({
   path: '/auth/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthEmployeeSignInRoute = AuthEmployeeSignInRouteImport.update({
-  id: '/auth/employee/sign-in',
-  path: '/auth/employee/sign-in',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const BusinessesBusinessslugIndexRoute =
+  BusinessesBusinessslugIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => BusinessesBusinessslugRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
-  '/businesses/$businessslug': typeof BusinessesBusinessslugRoute
+  '/businesses/$businessslug': typeof BusinessesBusinessslugRouteWithChildren
   '/businesses/register': typeof BusinessesRegisterRoute
   '/businesses/select-business': typeof BusinessesSelectBusinessRoute
-  '/auth/employee/sign-in': typeof AuthEmployeeSignInRoute
+  '/businesses/$businessslug/': typeof BusinessesBusinessslugIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
-  '/businesses/$businessslug': typeof BusinessesBusinessslugRoute
   '/businesses/register': typeof BusinessesRegisterRoute
   '/businesses/select-business': typeof BusinessesSelectBusinessRoute
-  '/auth/employee/sign-in': typeof AuthEmployeeSignInRoute
+  '/businesses/$businessslug': typeof BusinessesBusinessslugIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
-  '/businesses/$businessslug': typeof BusinessesBusinessslugRoute
+  '/businesses/$businessslug': typeof BusinessesBusinessslugRouteWithChildren
   '/businesses/register': typeof BusinessesRegisterRoute
   '/businesses/select-business': typeof BusinessesSelectBusinessRoute
-  '/auth/employee/sign-in': typeof AuthEmployeeSignInRoute
+  '/businesses/$businessslug/': typeof BusinessesBusinessslugIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,16 +91,15 @@ export interface FileRouteTypes {
     | '/businesses/$businessslug'
     | '/businesses/register'
     | '/businesses/select-business'
-    | '/auth/employee/sign-in'
+    | '/businesses/$businessslug/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth/sign-in'
     | '/auth/sign-up'
-    | '/businesses/$businessslug'
     | '/businesses/register'
     | '/businesses/select-business'
-    | '/auth/employee/sign-in'
+    | '/businesses/$businessslug'
   id:
     | '__root__'
     | '/'
@@ -109,17 +108,16 @@ export interface FileRouteTypes {
     | '/businesses/$businessslug'
     | '/businesses/register'
     | '/businesses/select-business'
-    | '/auth/employee/sign-in'
+    | '/businesses/$businessslug/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthSignInRoute: typeof AuthSignInRoute
   AuthSignUpRoute: typeof AuthSignUpRoute
-  BusinessesBusinessslugRoute: typeof BusinessesBusinessslugRoute
+  BusinessesBusinessslugRoute: typeof BusinessesBusinessslugRouteWithChildren
   BusinessesRegisterRoute: typeof BusinessesRegisterRoute
   BusinessesSelectBusinessRoute: typeof BusinessesSelectBusinessRoute
-  AuthEmployeeSignInRoute: typeof AuthEmployeeSignInRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -166,24 +164,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignInRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/employee/sign-in': {
-      id: '/auth/employee/sign-in'
-      path: '/auth/employee/sign-in'
-      fullPath: '/auth/employee/sign-in'
-      preLoaderRoute: typeof AuthEmployeeSignInRouteImport
-      parentRoute: typeof rootRouteImport
+    '/businesses/$businessslug/': {
+      id: '/businesses/$businessslug/'
+      path: '/'
+      fullPath: '/businesses/$businessslug/'
+      preLoaderRoute: typeof BusinessesBusinessslugIndexRouteImport
+      parentRoute: typeof BusinessesBusinessslugRoute
     }
   }
 }
+
+interface BusinessesBusinessslugRouteChildren {
+  BusinessesBusinessslugIndexRoute: typeof BusinessesBusinessslugIndexRoute
+}
+
+const BusinessesBusinessslugRouteChildren: BusinessesBusinessslugRouteChildren =
+  {
+    BusinessesBusinessslugIndexRoute: BusinessesBusinessslugIndexRoute,
+  }
+
+const BusinessesBusinessslugRouteWithChildren =
+  BusinessesBusinessslugRoute._addFileChildren(
+    BusinessesBusinessslugRouteChildren,
+  )
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthSignInRoute: AuthSignInRoute,
   AuthSignUpRoute: AuthSignUpRoute,
-  BusinessesBusinessslugRoute: BusinessesBusinessslugRoute,
+  BusinessesBusinessslugRoute: BusinessesBusinessslugRouteWithChildren,
   BusinessesRegisterRoute: BusinessesRegisterRoute,
   BusinessesSelectBusinessRoute: BusinessesSelectBusinessRoute,
-  AuthEmployeeSignInRoute: AuthEmployeeSignInRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

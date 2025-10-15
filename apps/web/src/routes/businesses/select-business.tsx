@@ -10,31 +10,31 @@ export const Route = createFileRoute("/businesses/select-business")({
       });
     }
 
-    // if (context.user.isRoot) {
-    //   if (context.user.isRootIn.length === 0) {
-    //     throw redirect({
-    //       to: "/business/register",
-    //     });
-    //   }
+    if (context.user.isRoot && context.user.isRootIn) {
+      if (context.user.isRootIn?.length === 0) {
+        throw redirect({
+          to: "/businesses/register",
+        });
+      }
 
-    //   if (context.user.isRootIn.length === 1) {
-    //     throw redirect({
-    //       to: "/business/$id",
-    //       params: {
-    //         id: context.user.isRootIn[0].id,
-    //       },
-    //     });
-    //   }
-    // }
+      if (context.user.isRootIn.length === 1) {
+        throw redirect({
+          to: "/businesses/$businessslug",
+          params: {
+            businessslug: context.user.isRootIn[0].slug,
+          },
+        });
+      }
+    }
 
-    // if (context.user.isEmployeeIn.length === 1) {
-    //   throw redirect({
-    //     to: "/business/$id",
-    //     params: {
-    //       id: context.user.isEmployeeIn[0].id,
-    //     },
-    //   });
-    // }
+    if (context.user.isEmployeeIn) {
+      throw redirect({
+        to: "/businesses/$businessslug",
+        params: {
+          businessslug: context.user.isEmployeeIn.slug,
+        },
+      });
+    }
   },
 });
 

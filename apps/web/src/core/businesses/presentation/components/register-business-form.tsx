@@ -1,21 +1,24 @@
-import { createContext, use } from "react";
+import { createContext, use, useId } from "react";
 import { useRouter } from "@tanstack/react-router";
+import { useAuth } from "@fludge/react-auth/auth.provider";
+import { businessesActions } from "@/core/shared/lib/api";
+import { useForm } from "react-hook-form";
 import {
-  type FormType,
-  useCreateBusinessForm,
-} from "@repo/ui/business/hooks/use.create-business-form";
-import { InputForm } from "@/core/shared/components/form/input-form";
-import { Form } from "@/core/shared/components/ui/form";
+  createBusinessSchema,
+  type CreateBusinessSchema,
+} from "@fludge/entities/schemas/businesses/create-business.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormInput } from "@/core/shared/components/form/form-input";
 import { Button } from "@/core/shared/components/ui/button";
-import { createBusinessAction } from "@/core/business/application/actions/create-business.action";
-import { useAuth } from "@/core/auth/application/providers/auth.provider";
+
+interface Context {
+  form: ReturnType<typeof useForm<CreateBusinessSchema>>;
+  formId: string;
+  onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
+}
 
 interface RootProps {
   children: React.ReactNode;
-}
-
-interface Context {
-  form: FormType;
 }
 
 const RegisterBusinessContext = createContext<Context | null>(null);
@@ -31,12 +34,23 @@ function useRegisterBusiness() {
 }
 
 function Root({ children }: RootProps) {
-  const form = useCreateBusinessForm();
   const router = useRouter();
-  const { refetchProfile } = useAuth();
+  const { getProfile } = useAuth();
+  const formId = `register-business-form-${useId()}`;
+  const form = useForm<CreateBusinessSchema>({
+    resolver: zodResolver(createBusinessSchema),
+    defaultValues: {
+      name: "",
+      nit: "",
+      address: "",
+      city: "",
+      state: "",
+    },
+  });
 
   const onSubmit = form.handleSubmit(async (data) => {
-    const res = await createBusinessAction(data);
+    //TODO: Move this to a mutation from tanstack query
+    const res = await businessesActions.register(data);
 
     if (res.error) {
       form.setError("root", {
@@ -52,27 +66,39 @@ function Root({ children }: RootProps) {
       return;
     }
 
-    await refetchProfile();
+    const user = await getProfile();
+
+    if (!user) return;
+
+    router.options.context.user = user;
 
     router.navigate({
-      to: "/business/$id",
+      to: "/businesses/$businessslug",
       params: {
-        id: res.data.id,
+        businessslug: res.data.slug,
       },
     });
   });
 
   return (
-    <RegisterBusinessContext.Provider value={{ form }}>
-      <Form {...form}>
-        {form.formState.errors.root && (
-          <div className="text-red-500 text-sm">
-            {form.formState.errors.root.message}
-          </div>
-        )}
-        <form onSubmit={onSubmit}>{children}</form>
-      </Form>
+    <RegisterBusinessContext.Provider value={{ form, formId, onSubmit }}>
+      {form.formState.errors.root && (
+        <div className="text-red-500 text-sm">
+          {form.formState.errors.root.message}
+        </div>
+      )}
+      {children}
     </RegisterBusinessContext.Provider>
+  );
+}
+
+function Content({ children }: { children: React.ReactNode }) {
+  const { formId, onSubmit } = useRegisterBusiness();
+
+  return (
+    <form id={formId} onSubmit={onSubmit}>
+      {children}
+    </form>
   );
 }
 
@@ -80,7 +106,7 @@ function Name() {
   const { form } = useRegisterBusiness();
 
   return (
-    <InputForm
+    <FormInput
       control={form.control}
       name="name"
       label="Nombre del negocio"
@@ -93,7 +119,7 @@ function NIT() {
   const { form } = useRegisterBusiness();
 
   return (
-    <InputForm
+    <FormInput
       control={form.control}
       name="nit"
       label="NIT"
@@ -106,7 +132,7 @@ function Address() {
   const { form } = useRegisterBusiness();
 
   return (
-    <InputForm
+    <FormInput
       control={form.control}
       name="address"
       label="Dirección"
@@ -119,7 +145,7 @@ function City() {
   const { form } = useRegisterBusiness();
 
   return (
-    <InputForm
+    <FormInput
       control={form.control}
       name="city"
       label="Ciudad"
@@ -132,7 +158,7 @@ function State() {
   const { form } = useRegisterBusiness();
 
   return (
-    <InputForm
+    <FormInput
       control={form.control}
       name="state"
       label="Pais"
@@ -158,4 +184,5 @@ export const RegisterBusinessForm = {
   City,
   State,
   Submit,
+  Content,
 };

@@ -64,8 +64,8 @@ function Root({ children }: RootProps) {
           return;
         }
 
-        if (user.isRootIn) {
-          if (user.isRootIn.length === 0) {
+        if (user.isRoot) {
+          if (!user.isRootIn) {
             router.navigate({
               to: "/businesses/register",
             });

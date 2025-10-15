@@ -1,6 +1,5 @@
 import { ChevronsUpDown, GalleryVerticalEnd, Plus } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { useAuth } from "@/core/auth/application/providers/auth.provider";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,8 +14,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/core/shared/components/ui/sidebar";
-import type { BusinessDetail } from "@repo/core/entities/business";
 import { cn } from "@/core/shared/lib/utils";
+import type { BusinessDetail } from "@fludge/entities/business.entity";
+import { useAuth } from "@fludge/react-auth/auth.provider";
 
 interface Props {
   currentBusiness: BusinessDetail;
@@ -54,7 +54,7 @@ function BusinessDropDown({ currentBusiness }: BussinesDropDownProps) {
         <DropdownMenuLabel className="text-muted-foreground text-xs">
           Mis Negocios
         </DropdownMenuLabel>
-        {user?.isRootIn.map((business) => (
+        {user?.isRootIn?.map((business) => (
           <DropdownMenuItem
             key={business.name}
             className={cn(
@@ -64,9 +64,9 @@ function BusinessDropDown({ currentBusiness }: BussinesDropDownProps) {
             asChild
           >
             <Link
-              to={"/business/$id"}
+              to={"/businesses/$businessslug"}
               params={{
-                id: business.id,
+                businessslug: business.slug,
               }}
             >
               {business.name}
@@ -79,7 +79,7 @@ function BusinessDropDown({ currentBusiness }: BussinesDropDownProps) {
             <Plus className="size-4" />
           </div>
           <Link
-            to={"/business/register"}
+            to={"/businesses/register"}
             className="text-muted-foreground font-medium"
           >
             Agregar negocio

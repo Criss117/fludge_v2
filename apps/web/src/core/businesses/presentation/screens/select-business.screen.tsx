@@ -1,16 +1,16 @@
+import { useState } from "react";
+import { Building2, Check, ChevronRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { useAuth } from "@/core/auth/application/providers/auth.provider";
+import { useAuth } from "@fludge/react-auth/auth.provider";
 import { Button } from "@/core/shared/components/ui/button";
 import { Card } from "@/core/shared/components/ui/card";
-import { Building2, Check, ChevronRight } from "lucide-react";
-import { useState } from "react";
 
 export function SelectBusinessScreen() {
   const { user } = useAuth();
   const [selectedBusiness, setSelectedBusiness] = useState<string | null>(null);
 
-  const handleSelectBusiness = (businessId: string) => {
-    setSelectedBusiness(businessId);
+  const handleSelectBusiness = (businessSlug: string) => {
+    setSelectedBusiness(businessSlug);
   };
 
   if (!user) {
@@ -34,7 +34,7 @@ export function SelectBusinessScreen() {
 
         {/* Business Cards */}
         <article className="space-y-3 mb-6">
-          {user.isRootIn.map((business) => (
+          {user.isRootIn?.map((business) => (
             <Card
               key={business.id}
               className={`p-4 cursor-pointer transition-all duration-200 hover:border-primary/50 ${
@@ -42,7 +42,7 @@ export function SelectBusinessScreen() {
                   ? "border-primary bg-accent/30"
                   : "border-border bg-card"
               }`}
-              onClick={() => handleSelectBusiness(business.id)}
+              onClick={() => handleSelectBusiness(business.slug)}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4 flex-1">
@@ -66,12 +66,12 @@ export function SelectBusinessScreen() {
                 </div>
                 <div
                   className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
-                    selectedBusiness === business.id
+                    selectedBusiness === business.slug
                       ? "border-primary bg-primary"
                       : "border-muted"
                   }`}
                 >
-                  {selectedBusiness === business.id && (
+                  {selectedBusiness === business.slug && (
                     <Check className="w-4 h-4 text-primary-foreground" />
                   )}
                 </div>
@@ -87,7 +87,10 @@ export function SelectBusinessScreen() {
           asChild
         >
           {selectedBusiness ? (
-            <Link to="/business/$id" params={{ id: selectedBusiness }}>
+            <Link
+              to="/businesses/$businessslug"
+              params={{ businessslug: selectedBusiness }}
+            >
               Continuar
               <ChevronRight className="w-5 h-5 ml-2" />
             </Link>
@@ -100,7 +103,7 @@ export function SelectBusinessScreen() {
 
         <footer>
           <Button variant="link">
-            <Link to="/business/register">Crea un nuevo negocio</Link>
+            <Link to="/businesses/register">Crea un nuevo negocio</Link>
           </Button>
         </footer>
       </div>
