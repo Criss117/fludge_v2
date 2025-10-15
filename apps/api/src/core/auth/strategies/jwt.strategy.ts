@@ -5,13 +5,13 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { JWTPayload } from '../dtos/jwt-payload.dto';
 import { UserDetail } from '@fludge/entities/user.entity';
 import { UserNotFoundException } from '@/core/users/exceptions/user-not-found.exception';
-import { FindOneUserByUseCase } from '@/core/users/use-cases/find-one-user-by.usecase';
+import { FindOneUserUseCase } from '@/core/users/use-cases/find-one-user.usecase';
 
 @Injectable()
 export class JWTStrategy extends PassportStrategy(Strategy) {
   constructor(
     configService: ConfigService,
-    private readonly findOneUserByUseCase: FindOneUserByUseCase,
+    private readonly findOneUserUseCase: FindOneUserUseCase,
   ) {
     const secret = configService.getOrThrow('JWT_SECRET');
 
@@ -22,14 +22,7 @@ export class JWTStrategy extends PassportStrategy(Strategy) {
   }
 
   public async validate(payload: JWTPayload): Promise<UserDetail> {
-    const user = await this.findOneUserByUseCase.execute(
-      {
-        id: payload.id,
-      },
-      {
-        ensureActive: true,
-      },
-    );
+    const user = await this.findOneUserUseCase.execute(payload.id);
 
     if (!user) throw new UserNotFoundException();
 
