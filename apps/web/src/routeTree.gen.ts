@@ -16,6 +16,8 @@ import { Route as BusinessesBusinessslugRouteImport } from './routes/businesses/
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as BusinessesBusinessslugIndexRouteImport } from './routes/businesses/$businessslug/index'
+import { Route as BusinessesBusinessslugGroupsIndexRouteImport } from './routes/businesses/$businessslug/groups/index'
+import { Route as BusinessesBusinessslugGroupsGroupslugRouteImport } from './routes/businesses/$businessslug/groups/$groupslug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -54,6 +56,18 @@ const BusinessesBusinessslugIndexRoute =
     path: '/',
     getParentRoute: () => BusinessesBusinessslugRoute,
   } as any)
+const BusinessesBusinessslugGroupsIndexRoute =
+  BusinessesBusinessslugGroupsIndexRouteImport.update({
+    id: '/groups/',
+    path: '/groups/',
+    getParentRoute: () => BusinessesBusinessslugRoute,
+  } as any)
+const BusinessesBusinessslugGroupsGroupslugRoute =
+  BusinessesBusinessslugGroupsGroupslugRouteImport.update({
+    id: '/groups/$groupslug',
+    path: '/groups/$groupslug',
+    getParentRoute: () => BusinessesBusinessslugRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -63,6 +77,8 @@ export interface FileRoutesByFullPath {
   '/businesses/register': typeof BusinessesRegisterRoute
   '/businesses/select-business': typeof BusinessesSelectBusinessRoute
   '/businesses/$businessslug/': typeof BusinessesBusinessslugIndexRoute
+  '/businesses/$businessslug/groups/$groupslug': typeof BusinessesBusinessslugGroupsGroupslugRoute
+  '/businesses/$businessslug/groups': typeof BusinessesBusinessslugGroupsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -71,6 +87,8 @@ export interface FileRoutesByTo {
   '/businesses/register': typeof BusinessesRegisterRoute
   '/businesses/select-business': typeof BusinessesSelectBusinessRoute
   '/businesses/$businessslug': typeof BusinessesBusinessslugIndexRoute
+  '/businesses/$businessslug/groups/$groupslug': typeof BusinessesBusinessslugGroupsGroupslugRoute
+  '/businesses/$businessslug/groups': typeof BusinessesBusinessslugGroupsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -81,6 +99,8 @@ export interface FileRoutesById {
   '/businesses/register': typeof BusinessesRegisterRoute
   '/businesses/select-business': typeof BusinessesSelectBusinessRoute
   '/businesses/$businessslug/': typeof BusinessesBusinessslugIndexRoute
+  '/businesses/$businessslug/groups/$groupslug': typeof BusinessesBusinessslugGroupsGroupslugRoute
+  '/businesses/$businessslug/groups/': typeof BusinessesBusinessslugGroupsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -92,6 +112,8 @@ export interface FileRouteTypes {
     | '/businesses/register'
     | '/businesses/select-business'
     | '/businesses/$businessslug/'
+    | '/businesses/$businessslug/groups/$groupslug'
+    | '/businesses/$businessslug/groups'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +122,8 @@ export interface FileRouteTypes {
     | '/businesses/register'
     | '/businesses/select-business'
     | '/businesses/$businessslug'
+    | '/businesses/$businessslug/groups/$groupslug'
+    | '/businesses/$businessslug/groups'
   id:
     | '__root__'
     | '/'
@@ -109,6 +133,8 @@ export interface FileRouteTypes {
     | '/businesses/register'
     | '/businesses/select-business'
     | '/businesses/$businessslug/'
+    | '/businesses/$businessslug/groups/$groupslug'
+    | '/businesses/$businessslug/groups/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -171,16 +197,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BusinessesBusinessslugIndexRouteImport
       parentRoute: typeof BusinessesBusinessslugRoute
     }
+    '/businesses/$businessslug/groups/': {
+      id: '/businesses/$businessslug/groups/'
+      path: '/groups'
+      fullPath: '/businesses/$businessslug/groups'
+      preLoaderRoute: typeof BusinessesBusinessslugGroupsIndexRouteImport
+      parentRoute: typeof BusinessesBusinessslugRoute
+    }
+    '/businesses/$businessslug/groups/$groupslug': {
+      id: '/businesses/$businessslug/groups/$groupslug'
+      path: '/groups/$groupslug'
+      fullPath: '/businesses/$businessslug/groups/$groupslug'
+      preLoaderRoute: typeof BusinessesBusinessslugGroupsGroupslugRouteImport
+      parentRoute: typeof BusinessesBusinessslugRoute
+    }
   }
 }
 
 interface BusinessesBusinessslugRouteChildren {
   BusinessesBusinessslugIndexRoute: typeof BusinessesBusinessslugIndexRoute
+  BusinessesBusinessslugGroupsGroupslugRoute: typeof BusinessesBusinessslugGroupsGroupslugRoute
+  BusinessesBusinessslugGroupsIndexRoute: typeof BusinessesBusinessslugGroupsIndexRoute
 }
 
 const BusinessesBusinessslugRouteChildren: BusinessesBusinessslugRouteChildren =
   {
     BusinessesBusinessslugIndexRoute: BusinessesBusinessslugIndexRoute,
+    BusinessesBusinessslugGroupsGroupslugRoute:
+      BusinessesBusinessslugGroupsGroupslugRoute,
+    BusinessesBusinessslugGroupsIndexRoute:
+      BusinessesBusinessslugGroupsIndexRoute,
   }
 
 const BusinessesBusinessslugRouteWithChildren =

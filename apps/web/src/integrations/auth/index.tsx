@@ -1,4 +1,5 @@
 import { authActions } from "@/core/shared/lib/api";
+import { PermissionsProvider } from "@fludge/react-auth/permissions.provider";
 import {
   AuthProvider,
   type StorageAdapter,
@@ -21,7 +22,7 @@ export function Auth({ children }: Props) {
       storage={storageAdapter}
       PendingComponent={<div>Loading...</div>}
     >
-      {children}
+      <PermissionsProvider>{children}</PermissionsProvider>
     </AuthProvider>
   );
 }

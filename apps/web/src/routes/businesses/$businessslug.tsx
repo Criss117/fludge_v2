@@ -4,6 +4,8 @@ import {
   SidebarProvider,
 } from "@/core/shared/components/ui/sidebar";
 import { businessesQueryOptions } from "@/core/shared/lib/api";
+import { useAuth } from "@fludge/react-auth/auth.provider";
+import { usePermissions } from "@fludge/react-auth/permissions.provider";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
@@ -29,11 +31,15 @@ export const Route = createFileRoute("/businesses/$businessslug")({
 
 function RouteComponent() {
   const { businessslug } = Route.useParams();
+  const { initState } = usePermissions();
+  const { user } = useAuth();
   const {
     data: { data: business },
   } = useSuspenseQuery(businessesQueryOptions.findOneBusiness(businessslug));
 
-  if (!business) return null;
+  if (!business || !user) return null;
+
+  initState(user, business);
 
   return (
     <SidebarProvider>
