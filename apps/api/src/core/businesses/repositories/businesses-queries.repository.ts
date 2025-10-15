@@ -22,29 +22,27 @@ export class BusinessesQueriesRepository {
     meta: FindManyBusinessByDto,
     options?: Options,
   ): Promise<BusinessSummary[]> {
-    const { id, name, nit, slug } = meta;
-
-    if (!id && !name && !nit) {
+    if (!meta?.id && !meta?.name && !meta?.nit) {
       throw new Error('Invalid query');
     }
 
     const filters: SQL[] = [];
     const optionsFilters: SQL[] = [];
 
-    if (id) {
-      filters.push(eq(businesses.id, id));
+    if (meta?.id) {
+      filters.push(eq(businesses.id, meta?.id));
     }
 
-    if (name) {
-      filters.push(eq(businesses.name, name));
+    if (meta?.name) {
+      filters.push(eq(businesses.name, meta?.name));
     }
 
-    if (nit) {
-      filters.push(eq(businesses.nit, nit));
+    if (meta?.nit) {
+      filters.push(eq(businesses.nit, meta?.nit));
     }
 
-    if (slug) {
-      filters.push(eq(businesses.slug, slug));
+    if (meta?.slug) {
+      filters.push(eq(businesses.slug, meta?.slug));
     }
 
     if (options?.ensureActive) {

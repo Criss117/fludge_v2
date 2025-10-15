@@ -24,13 +24,11 @@ export class CreateBusinessUseCase {
       },
     );
 
-    if (existingBusiness.length) {
-      throw new BusinessAlreadyExistsException();
-    }
+    if (existingBusiness.length) throw new BusinessAlreadyExistsException();
 
     const businessSlug = slugify(data.name);
 
-    return this.businessesCommandsRepository.save({
+    return this.businessesCommandsRepository.saveAndReturn({
       address: data.address,
       city: data.city,
       name: data.name,

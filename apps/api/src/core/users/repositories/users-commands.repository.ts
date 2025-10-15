@@ -13,8 +13,6 @@ export class UsersCommandsRepository {
   public async save(data: InsertUser, options?: Options) {
     const db = options?.tx ?? this.db;
 
-    console.log(data);
-
     await db
       .insert(users)
       .values(data)
