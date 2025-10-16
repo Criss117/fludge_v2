@@ -7,6 +7,7 @@ import type {
 } from "@fludge/entities/business.entity";
 import { safeAction } from "@fludge/api-utils/safe-action";
 import type { CommonResponse } from "../common-response";
+import { Permission } from "@fludge/entities/permissions.entity";
 
 export class BusinessActions {
   constructor(private readonly api: API) {}
@@ -35,6 +36,15 @@ export class BusinessActions {
           API_ENDPOINTS.BUSINESSES.FIND_ONE(businessSlug)
         ),
       "Error al buscar una empresa"
+    );
+
+    return res;
+  }
+
+  public async findAllPermissions(): Promise<CommonResponse<Permission[]>> {
+    const res = await safeAction(
+      () => this.api.get<Permission[]>(API_ENDPOINTS.AUTH.FIND_ALL_PERMISSIONS),
+      "Error al obtener permisos"
     );
 
     return res;

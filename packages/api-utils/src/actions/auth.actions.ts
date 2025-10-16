@@ -56,13 +56,4 @@ export class AuthActions {
 
     return res;
   }
-
-  public async findAllPermissions(): Promise<CommonResponse<Permission[]>> {
-    const res = await safeAction(
-      () => this.api.get<Permission[]>(API_ENDPOINTS.AUTH.FIND_ALL_PERMISSIONS),
-      "Error al obtener permisos"
-    );
-
-    return res;
-  }
 }

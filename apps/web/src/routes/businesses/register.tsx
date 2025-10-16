@@ -4,6 +4,8 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 export const Route = createFileRoute("/businesses/register")({
   component: RouteComponent,
   beforeLoad: ({ context }) => {
+    console.log({ context });
+
     if (!context.user) {
       throw redirect({
         to: "/auth/sign-in",

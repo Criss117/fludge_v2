@@ -14,4 +14,15 @@ export class BusinessesQueriesOptions {
       },
     });
   }
+
+  findAllPermissions() {
+    return queryOptions({
+      queryKey: ["permissions"],
+      queryFn: async () => {
+        const res = await this.businessActions.findAllPermissions();
+
+        return res;
+      },
+    });
+  }
 }
