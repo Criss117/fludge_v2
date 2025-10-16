@@ -17,6 +17,7 @@ import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as BusinessesBusinessslugIndexRouteImport } from './routes/businesses/$businessslug/index'
 import { Route as BusinessesBusinessslugGroupsIndexRouteImport } from './routes/businesses/$businessslug/groups/index'
+import { Route as BusinessesBusinessslugGroupsCreateRouteImport } from './routes/businesses/$businessslug/groups/create'
 import { Route as BusinessesBusinessslugGroupsGroupslugRouteImport } from './routes/businesses/$businessslug/groups/$groupslug'
 
 const IndexRoute = IndexRouteImport.update({
@@ -62,6 +63,12 @@ const BusinessesBusinessslugGroupsIndexRoute =
     path: '/groups/',
     getParentRoute: () => BusinessesBusinessslugRoute,
   } as any)
+const BusinessesBusinessslugGroupsCreateRoute =
+  BusinessesBusinessslugGroupsCreateRouteImport.update({
+    id: '/groups/create',
+    path: '/groups/create',
+    getParentRoute: () => BusinessesBusinessslugRoute,
+  } as any)
 const BusinessesBusinessslugGroupsGroupslugRoute =
   BusinessesBusinessslugGroupsGroupslugRouteImport.update({
     id: '/groups/$groupslug',
@@ -78,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/businesses/select-business': typeof BusinessesSelectBusinessRoute
   '/businesses/$businessslug/': typeof BusinessesBusinessslugIndexRoute
   '/businesses/$businessslug/groups/$groupslug': typeof BusinessesBusinessslugGroupsGroupslugRoute
+  '/businesses/$businessslug/groups/create': typeof BusinessesBusinessslugGroupsCreateRoute
   '/businesses/$businessslug/groups': typeof BusinessesBusinessslugGroupsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -88,6 +96,7 @@ export interface FileRoutesByTo {
   '/businesses/select-business': typeof BusinessesSelectBusinessRoute
   '/businesses/$businessslug': typeof BusinessesBusinessslugIndexRoute
   '/businesses/$businessslug/groups/$groupslug': typeof BusinessesBusinessslugGroupsGroupslugRoute
+  '/businesses/$businessslug/groups/create': typeof BusinessesBusinessslugGroupsCreateRoute
   '/businesses/$businessslug/groups': typeof BusinessesBusinessslugGroupsIndexRoute
 }
 export interface FileRoutesById {
@@ -100,6 +109,7 @@ export interface FileRoutesById {
   '/businesses/select-business': typeof BusinessesSelectBusinessRoute
   '/businesses/$businessslug/': typeof BusinessesBusinessslugIndexRoute
   '/businesses/$businessslug/groups/$groupslug': typeof BusinessesBusinessslugGroupsGroupslugRoute
+  '/businesses/$businessslug/groups/create': typeof BusinessesBusinessslugGroupsCreateRoute
   '/businesses/$businessslug/groups/': typeof BusinessesBusinessslugGroupsIndexRoute
 }
 export interface FileRouteTypes {
@@ -113,6 +123,7 @@ export interface FileRouteTypes {
     | '/businesses/select-business'
     | '/businesses/$businessslug/'
     | '/businesses/$businessslug/groups/$groupslug'
+    | '/businesses/$businessslug/groups/create'
     | '/businesses/$businessslug/groups'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -123,6 +134,7 @@ export interface FileRouteTypes {
     | '/businesses/select-business'
     | '/businesses/$businessslug'
     | '/businesses/$businessslug/groups/$groupslug'
+    | '/businesses/$businessslug/groups/create'
     | '/businesses/$businessslug/groups'
   id:
     | '__root__'
@@ -134,6 +146,7 @@ export interface FileRouteTypes {
     | '/businesses/select-business'
     | '/businesses/$businessslug/'
     | '/businesses/$businessslug/groups/$groupslug'
+    | '/businesses/$businessslug/groups/create'
     | '/businesses/$businessslug/groups/'
   fileRoutesById: FileRoutesById
 }
@@ -204,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BusinessesBusinessslugGroupsIndexRouteImport
       parentRoute: typeof BusinessesBusinessslugRoute
     }
+    '/businesses/$businessslug/groups/create': {
+      id: '/businesses/$businessslug/groups/create'
+      path: '/groups/create'
+      fullPath: '/businesses/$businessslug/groups/create'
+      preLoaderRoute: typeof BusinessesBusinessslugGroupsCreateRouteImport
+      parentRoute: typeof BusinessesBusinessslugRoute
+    }
     '/businesses/$businessslug/groups/$groupslug': {
       id: '/businesses/$businessslug/groups/$groupslug'
       path: '/groups/$groupslug'
@@ -217,6 +237,7 @@ declare module '@tanstack/react-router' {
 interface BusinessesBusinessslugRouteChildren {
   BusinessesBusinessslugIndexRoute: typeof BusinessesBusinessslugIndexRoute
   BusinessesBusinessslugGroupsGroupslugRoute: typeof BusinessesBusinessslugGroupsGroupslugRoute
+  BusinessesBusinessslugGroupsCreateRoute: typeof BusinessesBusinessslugGroupsCreateRoute
   BusinessesBusinessslugGroupsIndexRoute: typeof BusinessesBusinessslugGroupsIndexRoute
 }
 
@@ -225,6 +246,8 @@ const BusinessesBusinessslugRouteChildren: BusinessesBusinessslugRouteChildren =
     BusinessesBusinessslugIndexRoute: BusinessesBusinessslugIndexRoute,
     BusinessesBusinessslugGroupsGroupslugRoute:
       BusinessesBusinessslugGroupsGroupslugRoute,
+    BusinessesBusinessslugGroupsCreateRoute:
+      BusinessesBusinessslugGroupsCreateRoute,
     BusinessesBusinessslugGroupsIndexRoute:
       BusinessesBusinessslugGroupsIndexRoute,
   }
