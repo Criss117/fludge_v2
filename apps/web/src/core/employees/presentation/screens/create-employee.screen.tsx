@@ -89,11 +89,15 @@ export function CreateEmployeeScreen({ businessSlug }: Props) {
                 Especifica los datos del nuevo empleado.
               </CardDescription>
             </CardHeader>
-            <CardContent className="grid grid-cols-2 gap-4">
-              <CreateEmployeeForm.FirstName />
-              <CreateEmployeeForm.LastName />
-              <CreateEmployeeForm.Username />
-              <CreateEmployeeForm.Password />
+            <CardContent>
+              <CreateEmployeeForm.Content>
+                <fieldset className="grid grid-cols-2 gap-4">
+                  <CreateEmployeeForm.FirstName />
+                  <CreateEmployeeForm.LastName />
+                  <CreateEmployeeForm.Username />
+                  <CreateEmployeeForm.Password />
+                </fieldset>
+              </CreateEmployeeForm.Content>
             </CardContent>
           </Card>
           <GroupsForm businessSlug={businessSlug} groups={business.groups} />
