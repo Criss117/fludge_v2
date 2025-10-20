@@ -17,8 +17,11 @@ import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as BusinessesBusinessslugIndexRouteImport } from './routes/businesses/$businessslug/index'
 import { Route as BusinessesBusinessslugGroupsIndexRouteImport } from './routes/businesses/$businessslug/groups/index'
+import { Route as BusinessesBusinessslugEmployeesIndexRouteImport } from './routes/businesses/$businessslug/employees/index'
 import { Route as BusinessesBusinessslugGroupsCreateRouteImport } from './routes/businesses/$businessslug/groups/create'
 import { Route as BusinessesBusinessslugGroupsGroupslugRouteImport } from './routes/businesses/$businessslug/groups/$groupslug'
+import { Route as BusinessesBusinessslugEmployeesCreateRouteImport } from './routes/businesses/$businessslug/employees/create'
+import { Route as BusinessesBusinessslugEmployeesEmployeeidRouteImport } from './routes/businesses/$businessslug/employees/$employeeid'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -63,6 +66,12 @@ const BusinessesBusinessslugGroupsIndexRoute =
     path: '/groups/',
     getParentRoute: () => BusinessesBusinessslugRoute,
   } as any)
+const BusinessesBusinessslugEmployeesIndexRoute =
+  BusinessesBusinessslugEmployeesIndexRouteImport.update({
+    id: '/employees/',
+    path: '/employees/',
+    getParentRoute: () => BusinessesBusinessslugRoute,
+  } as any)
 const BusinessesBusinessslugGroupsCreateRoute =
   BusinessesBusinessslugGroupsCreateRouteImport.update({
     id: '/groups/create',
@@ -75,6 +84,18 @@ const BusinessesBusinessslugGroupsGroupslugRoute =
     path: '/groups/$groupslug',
     getParentRoute: () => BusinessesBusinessslugRoute,
   } as any)
+const BusinessesBusinessslugEmployeesCreateRoute =
+  BusinessesBusinessslugEmployeesCreateRouteImport.update({
+    id: '/employees/create',
+    path: '/employees/create',
+    getParentRoute: () => BusinessesBusinessslugRoute,
+  } as any)
+const BusinessesBusinessslugEmployeesEmployeeidRoute =
+  BusinessesBusinessslugEmployeesEmployeeidRouteImport.update({
+    id: '/employees/$employeeid',
+    path: '/employees/$employeeid',
+    getParentRoute: () => BusinessesBusinessslugRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -84,8 +105,11 @@ export interface FileRoutesByFullPath {
   '/businesses/register': typeof BusinessesRegisterRoute
   '/businesses/select-business': typeof BusinessesSelectBusinessRoute
   '/businesses/$businessslug/': typeof BusinessesBusinessslugIndexRoute
+  '/businesses/$businessslug/employees/$employeeid': typeof BusinessesBusinessslugEmployeesEmployeeidRoute
+  '/businesses/$businessslug/employees/create': typeof BusinessesBusinessslugEmployeesCreateRoute
   '/businesses/$businessslug/groups/$groupslug': typeof BusinessesBusinessslugGroupsGroupslugRoute
   '/businesses/$businessslug/groups/create': typeof BusinessesBusinessslugGroupsCreateRoute
+  '/businesses/$businessslug/employees': typeof BusinessesBusinessslugEmployeesIndexRoute
   '/businesses/$businessslug/groups': typeof BusinessesBusinessslugGroupsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -95,8 +119,11 @@ export interface FileRoutesByTo {
   '/businesses/register': typeof BusinessesRegisterRoute
   '/businesses/select-business': typeof BusinessesSelectBusinessRoute
   '/businesses/$businessslug': typeof BusinessesBusinessslugIndexRoute
+  '/businesses/$businessslug/employees/$employeeid': typeof BusinessesBusinessslugEmployeesEmployeeidRoute
+  '/businesses/$businessslug/employees/create': typeof BusinessesBusinessslugEmployeesCreateRoute
   '/businesses/$businessslug/groups/$groupslug': typeof BusinessesBusinessslugGroupsGroupslugRoute
   '/businesses/$businessslug/groups/create': typeof BusinessesBusinessslugGroupsCreateRoute
+  '/businesses/$businessslug/employees': typeof BusinessesBusinessslugEmployeesIndexRoute
   '/businesses/$businessslug/groups': typeof BusinessesBusinessslugGroupsIndexRoute
 }
 export interface FileRoutesById {
@@ -108,8 +135,11 @@ export interface FileRoutesById {
   '/businesses/register': typeof BusinessesRegisterRoute
   '/businesses/select-business': typeof BusinessesSelectBusinessRoute
   '/businesses/$businessslug/': typeof BusinessesBusinessslugIndexRoute
+  '/businesses/$businessslug/employees/$employeeid': typeof BusinessesBusinessslugEmployeesEmployeeidRoute
+  '/businesses/$businessslug/employees/create': typeof BusinessesBusinessslugEmployeesCreateRoute
   '/businesses/$businessslug/groups/$groupslug': typeof BusinessesBusinessslugGroupsGroupslugRoute
   '/businesses/$businessslug/groups/create': typeof BusinessesBusinessslugGroupsCreateRoute
+  '/businesses/$businessslug/employees/': typeof BusinessesBusinessslugEmployeesIndexRoute
   '/businesses/$businessslug/groups/': typeof BusinessesBusinessslugGroupsIndexRoute
 }
 export interface FileRouteTypes {
@@ -122,8 +152,11 @@ export interface FileRouteTypes {
     | '/businesses/register'
     | '/businesses/select-business'
     | '/businesses/$businessslug/'
+    | '/businesses/$businessslug/employees/$employeeid'
+    | '/businesses/$businessslug/employees/create'
     | '/businesses/$businessslug/groups/$groupslug'
     | '/businesses/$businessslug/groups/create'
+    | '/businesses/$businessslug/employees'
     | '/businesses/$businessslug/groups'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -133,8 +166,11 @@ export interface FileRouteTypes {
     | '/businesses/register'
     | '/businesses/select-business'
     | '/businesses/$businessslug'
+    | '/businesses/$businessslug/employees/$employeeid'
+    | '/businesses/$businessslug/employees/create'
     | '/businesses/$businessslug/groups/$groupslug'
     | '/businesses/$businessslug/groups/create'
+    | '/businesses/$businessslug/employees'
     | '/businesses/$businessslug/groups'
   id:
     | '__root__'
@@ -145,8 +181,11 @@ export interface FileRouteTypes {
     | '/businesses/register'
     | '/businesses/select-business'
     | '/businesses/$businessslug/'
+    | '/businesses/$businessslug/employees/$employeeid'
+    | '/businesses/$businessslug/employees/create'
     | '/businesses/$businessslug/groups/$groupslug'
     | '/businesses/$businessslug/groups/create'
+    | '/businesses/$businessslug/employees/'
     | '/businesses/$businessslug/groups/'
   fileRoutesById: FileRoutesById
 }
@@ -217,6 +256,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BusinessesBusinessslugGroupsIndexRouteImport
       parentRoute: typeof BusinessesBusinessslugRoute
     }
+    '/businesses/$businessslug/employees/': {
+      id: '/businesses/$businessslug/employees/'
+      path: '/employees'
+      fullPath: '/businesses/$businessslug/employees'
+      preLoaderRoute: typeof BusinessesBusinessslugEmployeesIndexRouteImport
+      parentRoute: typeof BusinessesBusinessslugRoute
+    }
     '/businesses/$businessslug/groups/create': {
       id: '/businesses/$businessslug/groups/create'
       path: '/groups/create'
@@ -231,23 +277,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BusinessesBusinessslugGroupsGroupslugRouteImport
       parentRoute: typeof BusinessesBusinessslugRoute
     }
+    '/businesses/$businessslug/employees/create': {
+      id: '/businesses/$businessslug/employees/create'
+      path: '/employees/create'
+      fullPath: '/businesses/$businessslug/employees/create'
+      preLoaderRoute: typeof BusinessesBusinessslugEmployeesCreateRouteImport
+      parentRoute: typeof BusinessesBusinessslugRoute
+    }
+    '/businesses/$businessslug/employees/$employeeid': {
+      id: '/businesses/$businessslug/employees/$employeeid'
+      path: '/employees/$employeeid'
+      fullPath: '/businesses/$businessslug/employees/$employeeid'
+      preLoaderRoute: typeof BusinessesBusinessslugEmployeesEmployeeidRouteImport
+      parentRoute: typeof BusinessesBusinessslugRoute
+    }
   }
 }
 
 interface BusinessesBusinessslugRouteChildren {
   BusinessesBusinessslugIndexRoute: typeof BusinessesBusinessslugIndexRoute
+  BusinessesBusinessslugEmployeesEmployeeidRoute: typeof BusinessesBusinessslugEmployeesEmployeeidRoute
+  BusinessesBusinessslugEmployeesCreateRoute: typeof BusinessesBusinessslugEmployeesCreateRoute
   BusinessesBusinessslugGroupsGroupslugRoute: typeof BusinessesBusinessslugGroupsGroupslugRoute
   BusinessesBusinessslugGroupsCreateRoute: typeof BusinessesBusinessslugGroupsCreateRoute
+  BusinessesBusinessslugEmployeesIndexRoute: typeof BusinessesBusinessslugEmployeesIndexRoute
   BusinessesBusinessslugGroupsIndexRoute: typeof BusinessesBusinessslugGroupsIndexRoute
 }
 
 const BusinessesBusinessslugRouteChildren: BusinessesBusinessslugRouteChildren =
   {
     BusinessesBusinessslugIndexRoute: BusinessesBusinessslugIndexRoute,
+    BusinessesBusinessslugEmployeesEmployeeidRoute:
+      BusinessesBusinessslugEmployeesEmployeeidRoute,
+    BusinessesBusinessslugEmployeesCreateRoute:
+      BusinessesBusinessslugEmployeesCreateRoute,
     BusinessesBusinessslugGroupsGroupslugRoute:
       BusinessesBusinessslugGroupsGroupslugRoute,
     BusinessesBusinessslugGroupsCreateRoute:
       BusinessesBusinessslugGroupsCreateRoute,
+    BusinessesBusinessslugEmployeesIndexRoute:
+      BusinessesBusinessslugEmployeesIndexRoute,
     BusinessesBusinessslugGroupsIndexRoute:
       BusinessesBusinessslugGroupsIndexRoute,
   }

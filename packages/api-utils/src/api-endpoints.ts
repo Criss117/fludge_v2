@@ -11,21 +11,23 @@ export const API_ENDPOINTS = {
       `/businesses/${businessSlug}` as `/businesses/${string}`,
     CREATE: "/businesses",
     GROUPS: {
-      FIND_ONE: (businessSlug: string, groupId: string) =>
-        `/businesses/${businessSlug}/groups/${groupId}` as `/businesses/${string}/groups/${string}`,
+      FIND_ONE: (businessSlug: string, groupSlug: string) =>
+        `/businesses/${businessSlug}/groups/${groupSlug}` as `/businesses/${string}/groups/${string}`,
       CREATE: (businessSlug: string) =>
         `/businesses/${businessSlug}/groups` as `/businesses/${string}/groups`,
-      UPDATE: (businessSlug: string, groupId: string) =>
-        `/businesses/${businessSlug}/groups/${groupId}` as `/businesses/${string}/groups/${string}`,
-      ASSIGN_EMPLOYEES: (businessSlug: string, groupId: string) =>
-        `/businesses/${businessSlug}/groups/${groupId}/employees` as `/businesses/${string}/groups/${string}/employees`,
-      REMOVE_EMPLOYEES: (businessSlug: string, groupId: string) =>
-        `/businesses/${businessSlug}/groups/${groupId}/employees` as `/businesses/${string}/groups/${string}/employees`,
+      UPDATE: (businessSlug: string, groupSlug: string) =>
+        `/businesses/${businessSlug}/groups/${groupSlug}` as `/businesses/${string}/groups/${string}`,
+      ASSIGN_EMPLOYEES: (businessSlug: string, groupSlug: string) =>
+        `/businesses/${businessSlug}/groups/${groupSlug}/employees` as `/businesses/${string}/groups/${string}/employees`,
+      REMOVE_EMPLOYEES: (businessSlug: string, groupSlug: string) =>
+        `/businesses/${businessSlug}/groups/${groupSlug}/employees` as `/businesses/${string}/groups/${string}/employees`,
     },
     EMPLOYEES: {
       CREATE: (businessSlug: string) =>
         `/businesses/${businessSlug}/employees` as `/businesses/${string}/employees`,
       FIND_ONE: (businessSlug: string, employeeId: string) =>
+        `/businesses/${businessSlug}/employees/${employeeId}` as `/businesses/${string}/employees/${string}`,
+      UPDATE: (businessSlug: string, employeeId: string) =>
         `/businesses/${businessSlug}/employees/${employeeId}` as `/businesses/${string}/employees/${string}`,
       ASSIGN_GROUPS: (businessSlug: string, employeeId: string) =>
         `/businesses/${businessSlug}/employees/${employeeId}/groups` as `/businesses/${string}/employees/${string}/groups`,

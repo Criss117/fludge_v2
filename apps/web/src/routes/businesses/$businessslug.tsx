@@ -14,17 +14,34 @@ export const Route = createFileRoute("/businesses/$businessslug")({
   beforeLoad: async ({ context, params }) => {
     if (!context.queryClient) throw new Error("No query client");
 
-    const businessResponse = await context.queryClient.ensureQueryData(
+    const businessPromise = await context.queryClient.ensureQueryData(
       businessesQueryOptions.findOneBusiness(params.businessslug)
     );
 
-    if (businessResponse.error || !businessResponse.data) {
+    const permissionsPromise = await context.queryClient.ensureQueryData(
+      businessesQueryOptions.findAllPermissions()
+    );
+
+    const [businessResponse, permissionsResponse] = await Promise.all([
+      businessPromise,
+      permissionsPromise,
+    ]);
+
+    if (
+      businessResponse.error ||
+      !businessResponse.data ||
+      !permissionsResponse.data ||
+      permissionsResponse.error
+    ) {
       throw redirect({
         to: "/",
       });
     }
 
-    return { business: businessResponse.data };
+    return {
+      business: businessResponse.data,
+      permissions: permissionsResponse.data,
+    };
   },
   pendingComponent: () => <div>Loading businesses...</div>,
 });

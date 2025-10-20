@@ -1,0 +1,242 @@
+import { useState } from "react";
+import { Button } from "@/core/shared/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/core/shared/components/ui/card";
+import { Checkbox } from "@/core/shared/components/ui/checkbox";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTrigger,
+} from "@/core/shared/components/ui/dialog";
+import { DialogTitle } from "@radix-ui/react-dialog";
+import { useMutateEmployees } from "@/core/employees/application/hooks/use.mutate-employees";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/core/shared/components/ui/alert-dialog";
+import { PlusCircleIcon, Trash2Icon } from "lucide-react";
+import type { GroupSummary } from "@fludge/entities/group.entity";
+import { GroupsTable } from "@/core/groups/presentation/components/groups-table";
+import { usePermissions } from "@fludge/react-auth/permissions.provider";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { businessesQueryOptions } from "@/core/shared/lib/api";
+
+interface Props {
+  businessSlug: string;
+  employeeId: string;
+  groups: GroupSummary[];
+}
+
+interface RemoveGroupsProps {
+  businessSlug: string;
+  employeeId: string;
+}
+
+function GroupsListDialog({ businessSlug, groups, employeeId }: Props) {
+  const {
+    data: { data: business },
+  } = useSuspenseQuery(businessesQueryOptions.findOneBusiness(businessSlug));
+  const { assignGroups } = useMutateEmployees();
+  const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
+
+  if (!business) return null;
+
+  const selectGroups = (group: GroupSummary) => {
+    if (selectedGroups.includes(group.id)) {
+      setSelectedGroups(selectedGroups.filter((id) => id !== group.id));
+    } else {
+      setSelectedGroups([...selectedGroups, group.id]);
+    }
+  };
+
+  const groupsToShow = business.groups.filter(
+    (group) => !groups.some((g) => g.id === group.id)
+  );
+
+  const handleClick = () => {
+    assignGroups.mutate({
+      businessSlug,
+      employeeId,
+      data: { groupIds: selectedGroups },
+    });
+  };
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline" className="rounded-full border-2">
+          <PlusCircleIcon />
+          Agregar Grupos
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Grupos</DialogTitle>
+          <DialogDescription>
+            Selecciona los grupos que deseas agregar a este empleado
+          </DialogDescription>
+        </DialogHeader>
+        <ul className="space-y-2">
+          {groupsToShow.map((group) => (
+            <li
+              className="border p-4 flex justify-between items-center"
+              onClick={() => selectGroups(group)}
+              key={group.id}
+            >
+              <Checkbox
+                onClick={() => selectGroups(group)}
+                checked={selectedGroups.includes(group.id)}
+              />
+              <span>{group.name}</span>
+            </li>
+          ))}
+          {!business.employees.length && (
+            <p className="text-muted-foreground text-sm">
+              No hay empleados registrados en la empresa
+            </p>
+          )}
+          {business.employees.length > 0 && !groupsToShow.length && (
+            <p className="text-muted-foreground text-sm">
+              Los empleados registrados ya estan asignados al grupo o no hay
+              empleados registrados
+            </p>
+          )}
+        </ul>
+        <DialogFooter className="sm:justify-between ">
+          <DialogClose>
+            <Button variant="destructive">Cancelar</Button>
+          </DialogClose>
+          <Button
+            disabled={selectedGroups.length === 0 || assignGroups.isPending}
+            onClick={handleClick}
+          >
+            Agregar ({selectedGroups.length}) grupos
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function RemoveGroups({ businessSlug, employeeId }: RemoveGroupsProps) {
+  const { table } = GroupsTable.useGroupsTable();
+  const { removeGroups } = useMutateEmployees();
+
+  const selectedGroups = table
+    .getSelectedRowModel()
+    .rows.flatMap((r) => r.original);
+
+  const handleClick = () => {
+    removeGroups.mutate({
+      businessSlug,
+      employeeId,
+      data: { groupIds: selectedGroups.map((g) => g.id) },
+    });
+  };
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button
+          variant="destructive"
+          className="rounded-full"
+          disabled={!selectedGroups.length}
+        >
+          <Trash2Icon />
+          Eliminar {selectedGroups.length > 0 &&
+            `(${selectedGroups.length})`}{" "}
+          Grupos
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Eliminar Grupos</AlertDialogTitle>
+          <AlertDialogDescription>
+            ¿Estas seguro que deseas eliminar los grupos?
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <p>Se eliminaran ({selectedGroups.length}) grupos.</p>
+        <ul>
+          {selectedGroups.map((group) => (
+            <li key={group.id}>- {group.name}</li>
+          ))}
+        </ul>
+        <p className="text-muted-foreground text-sm">
+          Si un empleado no está asignado a ningún grupo, este no podrá acceder
+          a la aplicación
+        </p>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={handleClick}
+            disabled={removeGroups.isPending}
+          >
+            Continuar
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
+
+export function EmployeeGroupsTable({
+  groups,
+  businessSlug,
+  employeeId,
+}: Props) {
+  const { userHasPermissions } = usePermissions();
+
+  const userCanUpdateEmployee = userHasPermissions("users:update");
+
+  return (
+    <Card>
+      <GroupsTable.Root data={groups} businessSlug={businessSlug}>
+        <CardHeader className="flex justify-between">
+          <div>
+            <CardTitle>Grupos</CardTitle>
+            <CardDescription>
+              {groups.length} {groups.length > 1 ? "grupos" : "grupo"}
+            </CardDescription>
+          </div>
+          <div className="space-x-2">
+            {userCanUpdateEmployee && (
+              <>
+                <RemoveGroups
+                  businessSlug={businessSlug}
+                  employeeId={employeeId}
+                />
+                <GroupsListDialog
+                  businessSlug={businessSlug}
+                  groups={groups}
+                  employeeId={employeeId}
+                />
+              </>
+            )}
+          </div>
+        </CardHeader>
+        <CardContent>
+          <GroupsTable.Content>
+            <GroupsTable.Header />
+            <GroupsTable.Body />
+          </GroupsTable.Content>
+        </CardContent>
+      </GroupsTable.Root>
+    </Card>
+  );
+}

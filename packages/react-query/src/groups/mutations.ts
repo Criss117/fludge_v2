@@ -1,10 +1,17 @@
 import { mutationOptions, type QueryClient } from "@tanstack/react-query";
 import type { GroupsActions } from "@fludge/api-utils/actions/groups.actions";
 import type { CreateGroupDto } from "@fludge/entities/schemas/groups/create-group.dto";
+import { UpdateGroupSchema } from "@fludge/entities/schemas/groups/update-group.schema";
 
 interface CreateGroup {
   businessSlug: string;
   data: CreateGroupDto;
+}
+
+interface UpdateGroup {
+  businessSlug: string;
+  groupSlug: string;
+  data: UpdateGroupSchema;
 }
 
 export class GroupMutationsOptions {
@@ -14,6 +21,28 @@ export class GroupMutationsOptions {
     const mutation = mutationOptions({
       mutationFn: async ({ businessSlug, data }: CreateGroup) => {
         const res = await this.groupsActions.create(businessSlug, data);
+
+        if (res.error) {
+          throw new Error(res.message, {
+            cause: res.message,
+          });
+        }
+
+        return res;
+      },
+    });
+
+    return mutation;
+  }
+
+  updateOptions() {
+    const mutation = mutationOptions({
+      mutationFn: async ({ businessSlug, data, groupSlug }: UpdateGroup) => {
+        const res = await this.groupsActions.update(
+          businessSlug,
+          groupSlug,
+          data
+        );
 
         if (res.error) {
           throw new Error(res.message, {

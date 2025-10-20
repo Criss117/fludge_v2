@@ -30,7 +30,7 @@ interface Category extends CommonProps {
 }
 
 interface Group extends CommonProps {
-  groupId: string;
+  groupSlug: string;
   groupName: string;
 }
 
@@ -211,7 +211,7 @@ export function PageHeaderGroups({
 export function PageHeaderGroup({
   businessSlug,
   isPage = false,
-  groupId,
+  groupSlug,
   groupName,
 }: Group) {
   return (
@@ -220,7 +220,7 @@ export function PageHeaderGroup({
       isPage={isPage}
       label={groupName}
       to="/businesses/$businessslug/groups/$groupslug"
-      params={{ businessslug: businessSlug, groupslug: groupId }}
+      params={{ businessslug: businessSlug, groupslug: groupSlug }}
     />
   );
 }
