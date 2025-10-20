@@ -21,6 +21,7 @@ import { UsersModule } from '../users/users.module';
 import { UpdateEmployeeUseCase } from './use-cases/employees/update-employee.usecase';
 import { AssignGroupsToEmployeeUseCase } from './use-cases/employees/assign-groups-to-employee.usecase';
 import { RemoveGroupsFromEmployeeUseCase } from './use-cases/employees/remove-groups-from-employee.usecase';
+import { RemoveEmployeesFromGroupUseCase } from './use-cases/groups/remove-employees-from-group.usecase';
 
 @Module({
   imports: [DbModule, UsersModule],
@@ -35,6 +36,7 @@ import { RemoveGroupsFromEmployeeUseCase } from './use-cases/employees/remove-gr
     CreateGroupUseCase,
     FindOneGroupUseCase,
     UpdateGroupUseCase,
+    RemoveEmployeesFromGroupUseCase,
 
     // employees use cases
     CreateEmployeeUseCase,

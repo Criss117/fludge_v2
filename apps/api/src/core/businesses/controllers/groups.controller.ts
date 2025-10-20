@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Patch,
+  Delete,
+} from '@nestjs/common';
 import { Permissions } from '@/core/auth/decorators/permissions.decorator';
 import { HTTPResponse } from '@/core/shared/http/response';
 import { GetBusiness } from '@/core/businesses/decorators/get-business.decorator';
@@ -8,6 +16,9 @@ import { FindOneGroupUseCase } from '../use-cases/groups/find-one-group.usecase'
 import { UpdateGroupUseCase } from '../use-cases/groups/update-group.usecase';
 import { CreateGroupDto } from '../dtos/groups/create-group.dto';
 import { UpdateGroupDto } from '../dtos/groups/update-group.dto';
+import { AssignEmployeesToGroupDto } from '../dtos/groups/assign-employees-to-group.dto';
+import { AssignEmployeesToGroupUseCase } from '../use-cases/groups/assign-employees-to-group.usecase';
+import { RemoveEmployeesFromGroupUseCase } from '../use-cases/groups/remove-employees-from-group.usecase';
 
 @Controller('businesses/:businessSlug/groups')
 export class GroupsController {
@@ -15,6 +26,8 @@ export class GroupsController {
     private readonly createGroupUseCase: CreateGroupUseCase,
     private readonly findOneGroupUseCase: FindOneGroupUseCase,
     private readonly updateGroupUseCase: UpdateGroupUseCase,
+    private readonly assignEmployeesToGroupUseCase: AssignEmployeesToGroupUseCase,
+    private readonly removeEmployeesFromGroupUseCase: RemoveEmployeesFromGroupUseCase,
   ) {}
 
   @Post()
@@ -55,6 +68,42 @@ export class GroupsController {
     await safeAction(
       () => this.updateGroupUseCase.execute(businessId, groupSlug, data),
       'Algo salió mal en la actualización del grupo',
+    );
+
+    return HTTPResponse.ok(null);
+  }
+
+  @Post(':groupSlug/employees')
+  @Permissions('groups:read', 'groups:update')
+  public async assignEmployees(
+    @GetBusiness('id') businessId: string,
+    @Param('groupSlug') groupSlug: string,
+    @Body() data: AssignEmployeesToGroupDto,
+  ) {
+    await safeAction(
+      () =>
+        this.assignEmployeesToGroupUseCase.execute(businessId, groupSlug, data),
+      'Algo salió mal en la asignación de empleados a grupo',
+    );
+
+    return HTTPResponse.ok(null);
+  }
+
+  @Delete(':groupSlug/employees')
+  @Permissions('groups:read', 'groups:update')
+  public async deleteEmployees(
+    @GetBusiness('id') businessId: string,
+    @Param('groupSlug') groupSlug: string,
+    @Body() data: AssignEmployeesToGroupDto,
+  ) {
+    await safeAction(
+      () =>
+        this.removeEmployeesFromGroupUseCase.execute(
+          businessId,
+          groupSlug,
+          data,
+        ),
+      'Algo salió mal en la eliminación de empleados de grupo',
     );
 
     return HTTPResponse.ok(null);
