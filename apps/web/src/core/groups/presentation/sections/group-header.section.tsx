@@ -12,6 +12,7 @@ import { usePermissions } from "@fludge/react-auth/permissions.provider";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
 import { Trash2Icon } from "lucide-react";
+import { UpdateGroupDialog } from "../components/update-group-dialog";
 
 interface Props {
   group: GroupDetail;
@@ -51,9 +52,9 @@ export function GroupHeaderSection({ group, businessSlug }: Props) {
                   Eliminar
                 </Button>
               )}
-              {/* {canUpdateGroup && (
-                <UpdateGroupDialog group={group} businessId={businessId} />
-              )} */}
+              {canUpdateGroup && (
+                <UpdateGroupDialog group={group} businessSlug={businessSlug} />
+              )}
             </div>
           </CardHeader>
           <CardContent className="flex justify-between h-12 items-center">

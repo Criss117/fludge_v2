@@ -5,6 +5,8 @@ import {
   TabsTrigger,
 } from "@/core/shared/components/ui/tabs";
 import type { GroupDetail } from "@fludge/entities/group.entity";
+import { EmployeesTable } from "../components/groups-data-tables/employee";
+import { PermissionsTable } from "../components/groups-data-tables/permissions";
 
 interface Props {
   group: GroupDetail;
@@ -24,10 +26,10 @@ export function GroupDataTablesSection({ group, businessSlug }: Props) {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="employees">
-          {/* <EmployeesTable group={group} businessSlug={businessSlug} /> */}
+          <EmployeesTable group={group} businessSlug={businessSlug} />
         </TabsContent>
         <TabsContent value="permissions">
-          {/* <PermissionsTable group={group} businessSlug={businessSlug} /> */}
+          <PermissionsTable group={group} businessSlug={businessSlug} />
         </TabsContent>
       </Tabs>
     </section>

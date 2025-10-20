@@ -1,7 +1,8 @@
-import { mutationOptions, type QueryClient } from "@tanstack/react-query";
+import { mutationOptions } from "@tanstack/react-query";
 import type { GroupsActions } from "@fludge/api-utils/actions/groups.actions";
 import type { CreateGroupDto } from "@fludge/entities/schemas/groups/create-group.dto";
-import { UpdateGroupSchema } from "@fludge/entities/schemas/groups/update-group.schema";
+import type { UpdateGroupSchema } from "@fludge/entities/schemas/groups/update-group.schema";
+import type { AssignEmployeesToGroupSchema } from "@fludge/entities/schemas/groups/assign-employees-to-group.schema";
 
 interface CreateGroup {
   businessSlug: string;
@@ -14,11 +15,17 @@ interface UpdateGroup {
   data: UpdateGroupSchema;
 }
 
+interface AssignEmployeesToGroup {
+  businessSlug: string;
+  groupSlug: string;
+  data: AssignEmployeesToGroupSchema;
+}
+
 export class GroupMutationsOptions {
   constructor(private readonly groupsActions: GroupsActions) {}
 
-  createOptions() {
-    const mutation = mutationOptions({
+  create() {
+    return mutationOptions({
       mutationFn: async ({ businessSlug, data }: CreateGroup) => {
         const res = await this.groupsActions.create(businessSlug, data);
 
@@ -31,12 +38,10 @@ export class GroupMutationsOptions {
         return res;
       },
     });
-
-    return mutation;
   }
 
-  updateOptions() {
-    const mutation = mutationOptions({
+  update() {
+    return mutationOptions({
       mutationFn: async ({ businessSlug, data, groupSlug }: UpdateGroup) => {
         const res = await this.groupsActions.update(
           businessSlug,
@@ -53,7 +58,53 @@ export class GroupMutationsOptions {
         return res;
       },
     });
+  }
 
-    return mutation;
+  assignEmployees() {
+    return mutationOptions({
+      mutationFn: async ({
+        businessSlug,
+        groupSlug,
+        data,
+      }: AssignEmployeesToGroup) => {
+        const res = await this.groupsActions.assignEmployees(
+          businessSlug,
+          groupSlug,
+          data
+        );
+
+        if (res.error) {
+          throw new Error(res.message, {
+            cause: res.message,
+          });
+        }
+
+        return res;
+      },
+    });
+  }
+
+  removeEmployees() {
+    return mutationOptions({
+      mutationFn: async ({
+        businessSlug,
+        groupSlug,
+        data,
+      }: AssignEmployeesToGroup) => {
+        const res = await this.groupsActions.removeEmployees(
+          businessSlug,
+          groupSlug,
+          data
+        );
+
+        if (res.error) {
+          throw new Error(res.message, {
+            cause: res.message,
+          });
+        }
+
+        return res;
+      },
+    });
   }
 }
