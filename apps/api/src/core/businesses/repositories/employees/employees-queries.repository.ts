@@ -30,36 +30,40 @@ export class EmployeesQueriesRepository {
       userOptionsFilters.push(eq(users.isActive, true));
     }
 
-    const groupsPromise = this.db
+    const [user] = await this.db
       .select({
-        ...getTableColumns(groups),
+        ...getTableColumns(users),
+        groupIds: employees.groupIds,
       })
-      .from(employees)
-      .innerJoin(groups, eq(employees.groupIds, groups.id))
-      .where(
-        and(
-          eq(employees.businessId, meta.businessId),
-          eq(employees.userId, meta.userId),
-          ...optionsFilters,
-        ),
-      );
-
-    const userPromise = this.db
-      .select()
       .from(users)
-      .where(and(eq(users.id, meta.userId), ...userOptionsFilters));
-
-    const [employeeeGroups, [user]] = await Promise.all([
-      groupsPromise,
-      userPromise,
-    ]);
+      .leftJoin(
+        employees,
+        and(
+          eq(employees.userId, meta.userId),
+          eq(employees.businessId, meta.businessId),
+        ),
+      )
+      .where(and(eq(users.id, meta.userId), ...optionsFilters));
 
     if (!user) return null;
 
+    if (!user.groupIds) {
+      return {
+        ...user,
+        employeeIn: meta.businessId,
+        groups: [],
+      };
+    }
+
+    const groupsSummary = await this.db
+      .select()
+      .from(groups)
+      .where(inArray(groups.id, user.groupIds));
+
     return {
       ...user,
-      groups: employeeeGroups,
       employeeIn: meta.businessId,
+      groups: groupsSummary,
     };
   }
 
