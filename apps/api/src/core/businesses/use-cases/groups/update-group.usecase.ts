@@ -61,7 +61,7 @@ export class UpdateGroupUseCase {
     }
 
     await this.groupsCommandsRepository.save({
-      id: groupSlug,
+      id: currentGroup.id,
       businessId,
       name: data.name ?? currentGroup.name,
       description: data.description ?? currentGroup.description,
