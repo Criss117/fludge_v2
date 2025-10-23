@@ -70,7 +70,9 @@ function PermissionsList({ businessSlug, group }: Props) {
         data: {
           name: group.name,
           description: group.description ?? undefined,
-          permissions: [...group.permissions, ...selectedPermissions],
+          permissions: Array.from(
+            new Set([...group.permissions, ...selectedPermissions])
+          ),
         },
       },
       {
