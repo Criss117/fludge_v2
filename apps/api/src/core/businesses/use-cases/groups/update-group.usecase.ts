@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { GroupSummary } from '@fludge/entities/group.entity';
 import { slugify } from '@/core/shared/utils/slugify';
 import { GroupsQueriesRepository } from '@/core/businesses/repositories/groups/groups-queries.repository';
 import { GroupsCommandsRepository } from '@/core/businesses/repositories/groups/groups-commands.repository';
 import { GroupAlreadyExistsException } from '@/core/businesses/exceptions/group-already-exists.exception';
+import { GroupNotFoundException } from '@/core/businesses/exceptions/group-not-found.exception';
 import type { UpdateGroupDto } from '@/core/businesses/dtos/groups/update-group.dto';
 
 @Injectable()
@@ -36,7 +36,7 @@ export class UpdateGroupUseCase {
       (group) => group.slug === groupSlug,
     );
 
-    if (!currentGroup) throw new GroupAlreadyExistsException();
+    if (!currentGroup) throw new GroupNotFoundException();
 
     if (
       data.name === currentGroup.name &&
@@ -46,8 +46,8 @@ export class UpdateGroupUseCase {
       return;
     }
 
-    const groupsInBusiness: GroupSummary[] = existingGroupsInBusiness.filter(
-      (group) => group.id !== groupSlug,
+    const groupsInBusiness = existingGroupsInBusiness.filter(
+      (group) => group.slug !== groupSlug,
     );
 
     const nameIsOccupied = groupsInBusiness.some(
