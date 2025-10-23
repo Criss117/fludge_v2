@@ -7,33 +7,33 @@ export const createRootUserSchema = z.object({
   password: z.string(),
   username: z
     .string({
-      message: "El nombre de usuario no puede estar vacío",
+      error: "El nombre de usuario no puede estar vacío",
     })
     .min(5, {
-      message: "El nombre de usuario debe tener como mínimo 5 caracteres",
+      error: "El nombre de usuario debe tener como mínimo 5 caracteres",
     })
     .max(100, {
-      message: "El nombre de usuario debe tener como máximo 100 caracteres",
+      error: "El nombre de usuario debe tener como máximo 100 caracteres",
     }),
   firstName: z
     .string({
-      message: "El nombre del usuario no puede estar vacío",
+      error: "El nombre del usuario no puede estar vacío",
     })
     .min(5, {
-      message: "El nombre del usuario debe tener como mínimo 5 caracteres",
+      error: "El nombre del usuario debe tener como mínimo 5 caracteres",
     })
     .max(100, {
-      message: "El nombre del usuario debe tener como máximo 100 caracteres",
+      error: "El nombre del usuario debe tener como máximo 100 caracteres",
     }),
   lastName: z
     .string({
-      message: "El apellido del usuario no puede estar vacío",
+      error: "El apellido del usuario no puede estar vacío",
     })
     .min(5, {
-      message: "El apellido del usuario debe tener como mínimo 5 caracteres",
+      error: "El apellido del usuario debe tener como mínimo 5 caracteres",
     })
     .max(100, {
-      message: "El apellido del usuario debe tener como máximo 100 caracteres",
+      error: "El apellido del usuario debe tener como máximo 100 caracteres",
     }),
 });
 

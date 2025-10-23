@@ -7,10 +7,10 @@ export const createGroupDto = z.object({
       error: "El nombre del grupo es obligatorio",
     })
     .min(1, {
-      message: "El nombre del grupo es obligatorio",
+      error: "El nombre del grupo es obligatorio",
     })
     .max(100, {
-      message: "El nombre del grupo debe tener un máximo de 100 caracteres",
+      error: "El nombre del grupo debe tener un máximo de 100 caracteres",
     }),
 
   description: z
@@ -18,8 +18,7 @@ export const createGroupDto = z.object({
       error: "La descripción del grupo debe ser una cadena de texto",
     })
     .max(255, {
-      message:
-        "La descripción del grupo debe tener un máximo de 255 caracteres",
+      error: "La descripción del grupo debe tener un máximo de 255 caracteres",
     })
     .optional(),
 
@@ -30,7 +29,7 @@ export const createGroupDto = z.object({
       })
     )
     .min(1, {
-      message: "El grupo debe tener al menos un permiso",
+      error: "El grupo debe tener al menos un permiso",
     }),
 });
 

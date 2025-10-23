@@ -35,7 +35,7 @@ interface ContextActions {
     data: SignInRootUserSchema,
     actions?: { onSuccess?: (jwt: string, user: UserDetail) => void }
   ) => Promise<void>;
-  signOut: () => Promise<void>;
+  signOut: (actions?: { onSuccess?: () => void }) => Promise<void>;
   getProfile: () => Promise<UserDetail | undefined>;
   // isTokenExpired: () => boolean;
   // getTokenExpiration: () => Date | null;
@@ -101,7 +101,7 @@ export function AuthProvider({
     actions?.onSuccess?.(jwt, user);
   };
 
-  const signOut = async () => {
+  const signOut = async (actions?: { onSuccess?: () => void }) => {
     try {
       await storage.removeItem(storageKey);
     } catch (err) {
@@ -112,6 +112,7 @@ export function AuthProvider({
     setAccessToken(null);
     setStatus("unauthenticated");
     setError(null);
+    actions?.onSuccess?.();
   };
 
   const getProfile = async (token?: string) => {

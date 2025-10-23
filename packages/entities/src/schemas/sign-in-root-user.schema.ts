@@ -8,8 +8,11 @@ export const signInRootUserSchema = z.object({
     .string({
       error: "La contraseña es obligatoria",
     })
+    .min(1, {
+      error: "La contraseña es obligatoria",
+    })
     .max(255, {
-      message: "La contraseña debe tener menos de 255 caracteres",
+      error: "La contraseña debe tener menos de 255 caracteres",
     }),
 });
 
@@ -19,14 +22,17 @@ export const signInEmployeeSchema = z.object({
       error: "El nombre de usuario es obligatorio",
     })
     .max(100, {
-      message: "El nombre de usuario debe tener menos de 100 caracteres",
+      error: "El nombre de usuario debe tener menos de 100 caracteres",
     }),
   password: z
     .string({
       error: "La contraseña es obligatoria",
     })
+    .min(1, {
+      error: "La contraseña es obligatoria",
+    })
     .max(255, {
-      message: "La contraseña debe tener menos de 255 caracteres",
+      error: "La contraseña debe tener menos de 255 caracteres",
     }),
 });
 
