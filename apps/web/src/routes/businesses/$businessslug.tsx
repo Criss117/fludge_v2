@@ -14,11 +14,11 @@ export const Route = createFileRoute("/businesses/$businessslug")({
   beforeLoad: async ({ context, params }) => {
     if (!context.queryClient) throw new Error("No query client");
 
-    const businessPromise = await context.queryClient.ensureQueryData(
+    const businessPromise = context.queryClient.ensureQueryData(
       businessesQueryOptions.findOneBusiness(params.businessslug)
     );
 
-    const permissionsPromise = await context.queryClient.ensureQueryData(
+    const permissionsPromise = context.queryClient.ensureQueryData(
       businessesQueryOptions.findAllPermissions()
     );
 
