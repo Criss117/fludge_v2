@@ -4,8 +4,6 @@ import {
 } from '@fludge/entities/permissions.entity';
 import { Transform } from 'class-transformer';
 import {
-  ArrayMinSize,
-  ArrayNotEmpty,
   IsArray,
   IsEnum,
   IsOptional,
@@ -35,12 +33,6 @@ export class CreateGroupDto {
 
   @IsArray({
     message: 'Los permisos deben ser un array válido',
-  })
-  @ArrayNotEmpty({
-    message: 'Los permisos del grupo son obligatorios',
-  })
-  @ArrayMinSize(1, {
-    message: 'Los permisos del grupo deben tener al menos un permiso',
   })
   @IsEnum(allPermissions, {
     each: true,
