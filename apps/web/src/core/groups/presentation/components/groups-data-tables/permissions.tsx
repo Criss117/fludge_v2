@@ -99,7 +99,6 @@ function PermissionsList({ businessSlug, group }: Props) {
             Selecciona los permisos que deseas agregar
           </DialogDescription>
         </DialogHeader>
-
         <ScrollArea className="h-[500px]">
           <ul className="space-y-2">
             {permissionsToShow.map((permission) => (

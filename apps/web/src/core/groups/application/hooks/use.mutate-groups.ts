@@ -55,6 +55,8 @@ export function useMutateGroups() {
         position: "top-center",
       });
 
+      console.log({ variables });
+
       queryClient.invalidateQueries(
         businessesQueryOptions.findOneBusiness(variables.businessSlug)
       );
@@ -87,6 +89,8 @@ export function useMutateGroups() {
       toast.success("Grupo actualizado exitosamente", {
         position: "top-center",
       });
+
+      console.log({ variables });
 
       queryClient.invalidateQueries(
         businessesQueryOptions.findOneBusiness(variables.businessSlug)

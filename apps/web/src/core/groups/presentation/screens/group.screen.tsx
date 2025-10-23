@@ -1,3 +1,4 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { GroupHeaderSection } from "../sections/group-header.section";
 import {
   PageHeader,
@@ -6,14 +7,21 @@ import {
   PageHeaderHome,
 } from "@/core/shared/components/page-header-bread-crumb";
 import { UserHasNoPermissionAlert } from "@/core/shared/components/unauthorized-alerts";
-import type { GroupDetail } from "@fludge/entities/group.entity";
 import { GroupDataTablesSection } from "../sections/group-data-tables.section";
+import { groupsQueriesOptions } from "@/core/shared/lib/api";
 
 interface Props {
-  group: GroupDetail;
+  businessSlug: string;
+  groupSlug: string;
 }
 
-export function GroupScreen({ group }: Props) {
+export function GroupScreen({ businessSlug, groupSlug }: Props) {
+  const {
+    data: { data: group },
+  } = useSuspenseQuery(groupsQueriesOptions.findOne(businessSlug, groupSlug));
+
+  if (!group) return null;
+
   return (
     <section className="mx-2 space-y-5">
       <PageHeader>
@@ -37,12 +45,12 @@ export function GroupScreen({ group }: Props) {
   );
 }
 
-export function WithOutPermissions({ group }: Props) {
+export function WithOutPermissions({ businessSlug }: Props) {
   return (
     <section className="mx-2 space-y-5">
       <PageHeader>
-        <PageHeaderHome businessSlug={group.business.slug} />
-        <PageHeaderGroups businessSlug={group.business.slug} />
+        <PageHeaderHome businessSlug={businessSlug} />
+        <PageHeaderGroups businessSlug={businessSlug} />
       </PageHeader>
       <UserHasNoPermissionAlert />
     </section>

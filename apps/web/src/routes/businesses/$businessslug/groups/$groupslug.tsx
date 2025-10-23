@@ -21,14 +21,12 @@ export const Route = createFileRoute(
         },
       });
     }
-
-    return { group: group.data };
   },
   pendingComponent: () => <div>Loading groups...</div>,
 });
 
 function RouteComponent() {
-  const { group } = Route.useLoaderData();
+  const { businessslug, groupslug } = Route.useParams();
 
-  return <GroupScreen group={group} />;
+  return <GroupScreen businessSlug={businessslug} groupSlug={groupslug} />;
 }

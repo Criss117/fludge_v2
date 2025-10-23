@@ -1,4 +1,4 @@
-import { and, desc, eq, inArray, sql, type SQL } from 'drizzle-orm';
+import { and, desc, eq, inArray, or, sql, type SQL } from 'drizzle-orm';
 import { getTableColumns } from 'drizzle-orm';
 import { Inject, Injectable } from '@nestjs/common';
 import { DBSERVICE, type LibSQLDatabase } from '@/core/db/db.module';
@@ -104,7 +104,7 @@ export class GroupsQueriesRepository {
       .from(groups)
       .where(
         and(
-          ...filters,
+          or(...filters),
           ...optionsFilters,
           eq(groups.businessId, meta.businessId),
         ),

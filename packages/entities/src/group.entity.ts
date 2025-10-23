@@ -8,7 +8,7 @@ export interface GroupSummary extends AuditMetadata {
   name: string;
   slug: string;
   businessId: string;
-  description: string | null;
+  description?: string | null;
   permissions: Permission[];
 }
 
