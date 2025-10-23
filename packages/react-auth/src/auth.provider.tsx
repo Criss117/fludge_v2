@@ -33,7 +33,10 @@ interface ContextData {
 interface ContextActions {
   signInRootUser: (
     data: SignInRootUserSchema,
-    actions?: { onSuccess?: (jwt: string, user: UserDetail) => void }
+    actions?: {
+      onSuccess?: (jwt: string, user: UserDetail) => void;
+      onError?: (error: string) => void;
+    }
   ) => Promise<void>;
   signOut: (actions?: { onSuccess?: () => void }) => Promise<void>;
   getProfile: () => Promise<UserDetail | undefined>;
@@ -67,7 +70,10 @@ export function AuthProvider({
 
   const signInRootUser = async (
     data: SignInRootUserSchema,
-    actions?: { onSuccess?: (jwt: string, user: UserDetail) => void }
+    actions?: {
+      onSuccess?: (jwt: string, user: UserDetail) => void;
+      onError?: (error: string) => void;
+    }
   ) => {
     setStatus("loading");
     setError(null);
@@ -75,8 +81,9 @@ export function AuthProvider({
     const response = await authActions.signIn(data);
 
     if (response.error || !response.data) {
-      setError(response.error || "Error desconocido");
+      setError(response.message || "Error desconocido");
       setStatus("error");
+      actions?.onError?.(response.message || "Error desconocido");
       return;
     }
 

@@ -31,11 +31,9 @@ export const Route = createFileRoute("/auth/sign-in")({
         });
       }
 
-      if (context.user.isRootIn.length > 1) {
-        throw redirect({
-          to: "/businesses/select-business",
-        });
-      }
+      throw redirect({
+        to: "/businesses/select-business",
+      });
     }
   },
 });

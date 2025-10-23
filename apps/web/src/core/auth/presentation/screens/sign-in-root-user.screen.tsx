@@ -25,6 +25,7 @@ export function SignInRootUserScreen() {
         </CardHeader>
         <CardContent className="space-y-5">
           <SignInRootUserForm.Root>
+            <SignInRootUserForm.RootMessage />
             <SignInRootUserForm.Content>
               <fieldset className="space-y-5">
                 <SignInRootUserForm.Email />

@@ -10,6 +10,12 @@ import { useAuth } from "@fludge/react-auth/auth.provider";
 import { FormInput } from "@/core/shared/components/form/form-input";
 import { Button } from "@/core/shared/components/ui/button";
 import { api } from "@/core/shared/lib/api";
+import { AlertTriangle } from "lucide-react";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/core/shared/components/ui/alert";
 
 interface RootProps {
   children: React.ReactNode;
@@ -40,8 +46,8 @@ function Root({ children }: RootProps) {
   const form = useForm<SignInRootUserSchema>({
     resolver: zodResolver(signInRootUserSchema),
     defaultValues: {
-      email: "cristian@fludge.dev",
-      password: "holiwiss",
+      email: "",
+      password: "",
     },
   });
   const formId = `sign-in-root-user-form-${useId()}`;
@@ -65,7 +71,7 @@ function Root({ children }: RootProps) {
         }
 
         if (user.isRoot) {
-          if (!user.isRootIn) {
+          if (!user.isRootIn || user.isRootIn.length === 0) {
             router.navigate({
               to: "/businesses/register",
             });
@@ -87,9 +93,12 @@ function Root({ children }: RootProps) {
           router.navigate({
             to: "/businesses/select-business",
           });
-
-          return;
         }
+      },
+      onError: (error) => {
+        form.setError("root", {
+          message: error,
+        });
       },
     });
   });
@@ -104,6 +113,20 @@ function Root({ children }: RootProps) {
     >
       {children}
     </SignInRootUserContext.Provider>
+  );
+}
+
+function RootMessage() {
+  const { form } = useSignInRootUserContext();
+
+  if (!form.formState.errors.root) return null;
+
+  return (
+    <Alert variant="destructive">
+      <AlertTriangle />
+      <AlertTitle>Hubo un error al iniciar sesión</AlertTitle>
+      <AlertDescription>{form.formState.errors.root.message}</AlertDescription>
+    </Alert>
   );
 }
 
@@ -163,4 +186,5 @@ export const SignInRootUserForm = {
   Email,
   Password,
   Submit,
+  RootMessage,
 };
