@@ -74,7 +74,7 @@ function EmployeeListDialog({ businessSlug, group }: Props) {
   const handleClick = () => {
     assignEmployees.mutate({
       businessSlug,
-      groupSlug: group.id,
+      groupSlug: group.slug,
       data: {
         employeeIds: selectedEmployees,
       },
@@ -125,7 +125,7 @@ function EmployeeListDialog({ businessSlug, group }: Props) {
           )}
         </ul>
         <DialogFooter className="sm:justify-between ">
-          <DialogClose>
+          <DialogClose asChild>
             <Button variant="destructive">Cancelar</Button>
           </DialogClose>
           <Button
@@ -234,7 +234,7 @@ export function EmployeesTable({ group, businessSlug }: Props) {
               <>
                 <RemoveEmployees
                   businessSlug={businessSlug}
-                  groupSlug={group.id}
+                  groupSlug={group.slug}
                 />
                 <EmployeeListDialog businessSlug={businessSlug} group={group} />
               </>
