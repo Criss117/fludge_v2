@@ -24,14 +24,26 @@ import {
 import { Avatar, AvatarFallback } from "@/core/shared/components/ui/avatar";
 import { useAuth } from "@fludge/react-auth/auth.provider";
 import { avatarFallback } from "@/core/shared/lib/utils";
+import { useRouter } from "@tanstack/react-router";
 
 export function BusinessSidebarFooter() {
-  const { user } = useAuth();
+  const router = useRouter();
+  const { user, signOut } = useAuth();
   const { isMobile } = useSidebar();
 
   if (!user) {
     return null;
   }
+
+  const onSignOut = () => {
+    signOut({
+      onSuccess: () => {
+        router.navigate({
+          to: "/",
+        });
+      },
+    });
+  };
 
   return (
     <SidebarMenu>
@@ -96,7 +108,7 @@ export function BusinessSidebarFooter() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={onSignOut}>
               <LogOut />
               Cerrar sesión
             </DropdownMenuItem>
